@@ -16,6 +16,7 @@
     <AndroidManifest>$(MSBuildProjectDirectory)\Platforms\Android\AndroidManifest.Release.xml</AndroidManifest>
   </PropertyGroup>
   <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.14" />

@@ -5,12 +5,13 @@
              Shell.NavBarIsVisible="False" BackgroundColor="{StaticResource Canvas}">
     <ScrollView>
         <VerticalStackLayout Padding="20,18,20,28" Spacing="20">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
-                    <Label Text="Pai Pai" FontSize="25" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+            <Grid ColumnDefinitions="42,*,Auto" ColumnSpacing="10">
+                <Image Source="paipai_mark.png" HeightRequest="39" WidthRequest="39" VerticalOptions="Center" />
+                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                    <Label Text="Pai Pai" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
                     <Label Text="YOUR MONEY, IN FOCUS" Style="{StaticResource Eyebrow}" />
                 </VerticalStackLayout>
-                <Button Grid.Column="1" Text="•••" Command="{Binding SettingsCommand}"
+                <Button Grid.Column="2" Text="•••" Command="{Binding SettingsCommand}"
                         Style="{StaticResource SecondaryButton}" WidthRequest="48" HeightRequest="48" Padding="0" />
             </Grid>
 
