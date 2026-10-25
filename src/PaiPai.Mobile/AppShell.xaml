@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:PaiPai.Mobile.Pages"
+       x:Class="PaiPai.Mobile.AppShell"
+       Shell.BackgroundColor="{StaticResource Canvas}"
+       Shell.ForegroundColor="{StaticResource Primary}"
+       Shell.TitleColor="{StaticResource Ink}"
+       Shell.TabBarBackgroundColor="{StaticResource Surface}"
+       Shell.TabBarForegroundColor="{StaticResource Primary}"
+       Shell.TabBarUnselectedColor="{StaticResource Muted}"
+       Shell.TabBarTitleColor="{StaticResource Primary}">
+    <TabBar Shell.TabBarBackgroundColor="{StaticResource Surface}">
+        <ShellContent Title="Home" Icon="nav_home.png" Route="home" ContentTemplate="{DataTemplate pages:HomePage}" />
+        <ShellContent Title="History" Icon="nav_history.png" Route="history" ContentTemplate="{DataTemplate pages:HistoryPage}" />
+        <ShellContent Title="Summary" Icon="nav_summary.png" Route="summary" ContentTemplate="{DataTemplate pages:SummaryPage}" />
+        <ShellContent Title="Bills" Icon="nav_bills.png" Route="bills" ContentTemplate="{DataTemplate pages:BillsPage}" />
+        <ShellContent Title="More" Icon="nav_settings.png" Route="settings" ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    </TabBar>
+</Shell>

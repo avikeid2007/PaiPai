@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PaiPai.Mobile.Pages.AddExpensePage" Title="Transaction" BackgroundColor="{StaticResource Canvas}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20,14,20,28" Spacing="15">
+            <Border BackgroundColor="{StaticResource PrimaryDeep}" StrokeThickness="0" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <Grid ColumnDefinitions="44,*" ColumnSpacing="12">
+                    <Border BackgroundColor="#2B5A4C" HeightRequest="42" WidthRequest="42">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Label Text="₹" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource Lime}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Text="Every little detail adds up" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="Add a purchase or incoming payment" FontSize="12" TextColor="#D4E3DA" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="13">
+                    <Label Text="TRANSACTION TYPE" Style="{StaticResource Eyebrow}" />
+                    <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="8,0">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Picker ItemsSource="{Binding Directions}" SelectedItem="{Binding Direction}" Style="{StaticResource FieldPicker}" />
+                    </Border>
+                    <Label Text="AMOUNT" Style="{StaticResource Eyebrow}" Margin="0,5,0,0" />
+                    <Border BackgroundColor="{StaticResource Canvas}" Stroke="{StaticResource Line}" Padding="12,2">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="15" /></Border.StrokeShape>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <Label Text="₹" FontSize="25" FontAttributes="Bold" TextColor="{StaticResource Primary}" VerticalTextAlignment="Center" />
+                            <Entry Grid.Column="1" Text="{Binding AmountText}" Keyboard="Numeric" Placeholder="0.00"
+                                   FontSize="27" FontAttributes="Bold" Style="{StaticResource FieldEntry}" />
+                        </Grid>
+                    </Border>
+                    <Label Text="PAID TO / RECEIVED FROM" Style="{StaticResource Eyebrow}" Margin="0,5,0,0" />
+                    <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="10,0">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Entry Text="{Binding Payee}" Placeholder="Merchant or person" Style="{StaticResource FieldEntry}" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="METHOD" Style="{StaticResource Eyebrow}" />
+                            <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="6,0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Picker ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}" Style="{StaticResource FieldPicker}" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="CATEGORY" Style="{StaticResource Eyebrow}" />
+                            <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="6,0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}" Style="{StaticResource FieldPicker}" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="MORE DETAILS" Style="{StaticResource Eyebrow}" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Account / card digits" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="8,0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="13" /></Border.StrokeShape>
+                                <Entry Text="{Binding AccountHint}" Keyboard="Numeric" MaxLength="4" Placeholder="Optional" Style="{StaticResource FieldEntry}" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Date" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="7,0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="13" /></Border.StrokeShape>
+                                <DatePicker Date="{Binding Date}" Style="{StaticResource FieldDatePicker}" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Label Text="NOTE" Style="{StaticResource Eyebrow}" Margin="0,2,0,0" />
+                    <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="10,0">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="13" /></Border.StrokeShape>
+                        <Entry Text="{Binding Note}" Placeholder="Add a note (optional)" Style="{StaticResource FieldEntry}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding ErrorMessage}" TextColor="{StaticResource Danger}" FontSize="13" />
+            <Button Text="{Binding SaveLabel}" Command="{Binding SaveCommand}" Style="{StaticResource AccentButton}" HeightRequest="54" />
+            <Button Text="Delete transaction" Command="{Binding DeleteCommand}" IsVisible="{Binding IsEditing}" Style="{StaticResource DangerButton}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

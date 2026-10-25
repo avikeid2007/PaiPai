@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PaiPai.Mobile.Pages.BillsPage" Title="Bills"
+             Shell.NavBarIsVisible="False" BackgroundColor="{StaticResource Canvas}">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20,16,20,10" RowSpacing="13">
+        <VerticalStackLayout Spacing="3">
+            <Label Text="Bills" Style="{StaticResource PageTitle}" />
+            <Label Text="Stay ahead of what’s due" Style="{StaticResource BodyMuted}" />
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <Border BackgroundColor="{StaticResource SoftGreen}" StrokeThickness="0" Padding="13,10" VerticalOptions="Center">
+                <Border.StrokeShape><RoundRectangle CornerRadius="15" /></Border.StrokeShape>
+                <Label Text="{Binding Status}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource PrimaryDeep}" VerticalOptions="Center" />
+            </Border>
+            <Button Grid.Column="1" Text="＋ Add bill" Command="{Binding AddCommand}" Style="{StaticResource AccentButton}"
+                    HeightRequest="46" Padding="14,8" VerticalOptions="Center" />
+        </Grid>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Bills}" SelectionMode="None" Margin="0,2,0,0">
+            <CollectionView.EmptyView>
+                <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="22" Margin="0,10">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Border BackgroundColor="{StaticResource SoftGreen}" HeightRequest="48" WidthRequest="48" HorizontalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                            <Label Text="✓" FontSize="22" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+                        <Label Text="You’re all caught up" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Label Text="Add a bill or subscription and Pai Pai will keep its due date visible here." Style="{StaticResource BodyMuted}" />
+                    </VerticalStackLayout>
+                </Border>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" StrokeThickness="1" Padding="15" Margin="0,0,0,11">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="12">
+                            <Grid ColumnDefinitions="42,*,Auto" ColumnSpacing="10">
+                                <Border BackgroundColor="{StaticResource SoftAmber}" HeightRequest="40" WidthRequest="40">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                    <Label Text="◷" FontSize="21" TextColor="#806323" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Cadence}" FontSize="12" TextColor="{StaticResource Muted}" />
+                                </VerticalStackLayout>
+                                <Border Grid.Column="2" BackgroundColor="{StaticResource SoftAmber}" Padding="9,5" VerticalOptions="Start">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                                    <Label Text="{Binding DisplayStatus}" FontSize="11" FontAttributes="Bold" TextColor="#806323" />
+                                </Border>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="DUE DATE" Style="{StaticResource Eyebrow}" />
+                                    <Label Text="{Binding DisplayDueDate}" FontSize="13" TextColor="{StaticResource Ink}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="{Binding DisplayAmount}" FontSize="19" FontAttributes="Bold" TextColor="{StaticResource Ink}" VerticalOptions="Center" />
+                            </Grid>
+                            <Label Text="{Binding DisplayAccountHint}" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="7">
+                                <Button Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+                                        CommandParameter="{Binding .}" Style="{StaticResource SecondaryButton}" HeightRequest="42" FontSize="12" Padding="7,6" />
+                                <Button Grid.Column="1" Text="Mark paid" IsVisible="{Binding CanMarkPaid}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkPaidCommand}"
+                                        CommandParameter="{Binding .}" BackgroundColor="{StaticResource Primary}" TextColor="White" FontAttributes="Bold" CornerRadius="13" HeightRequest="42" FontSize="12" Padding="7,6" />
+                                <Button Grid.Column="2" Text="Dismiss" IsVisible="{Binding CanDismiss}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DismissCommand}"
+                                        CommandParameter="{Binding .}" BackgroundColor="Transparent" TextColor="{StaticResource Muted}" CornerRadius="13" HeightRequest="42" FontSize="12" Padding="7,6" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

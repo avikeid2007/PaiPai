@@ -1,0 +1,4672 @@
+{
+  "dataset_name": "SplitEasy Indian payment SMS corpus",
+  "version": "0.2.0",
+  "seed_rows": 58,
+  "numeric_variants": 114,
+  "created": "2026-08-28",
+  "purpose": "Parser fixtures for Indian bank, UPI, wallet, ATM, transfer, card, and non-transaction alerts.",
+  "data_status": "synthetic_redacted",
+  "provenance_policy": "Every body is an invented, redacted rewrite of a public OSS grammar or edge case. No private inbox messages, live account numbers, phone numbers, or transaction references are included.",
+  "row_schema": {
+    "id": "stable fixture identifier",
+    "source_ids": "attribution IDs documented in docs/indian-payment-sms-dataset-sources.md",
+    "provenance": "synthetic_rewrite or synthetic_adversarial",
+    "kind": "debit, credit, refund, reversal, upcoming, card_bill, declined, failed, mandate, or non_financial",
+    "rail": "upi, card, bank_account, atm, transfer, wallet, or unknown",
+    "raw_sms": "invented body with bank-like formatting",
+    "expected": "gold fields; transaction_amount_paise is null when no completed debit or credit should be booked",
+    "variant_of": "original row ID for a synthetic numeric variant; absent on seed rows"
+  },
+  "rows": [
+    {
+      "id": "upi-hdfc-multiline-001",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Sent Rs.500.00\\nFrom HDFC Bank A/C XX1234\\nTo SWIGGY\\nOn 12/08/26\\nRef 123456789001\\nNot You? Report it to your bank.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": "123456789001"
+      }
+    },
+    {
+      "id": "upi-hdfc-vpa-002",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Rs.500.00 debited from A/c XX4321 on 20-Aug-26 to merchant@upi (UPI Ref No 123456789002)",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": "merchant",
+        "account_last4": "4321",
+        "card_last4": null,
+        "reference": "123456789002"
+      }
+    },
+    {
+      "id": "upi-sbi-currencyless-003",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear UPI user A/C X5678 debited by 420.50 on date 12Aug26 trf to COFFEE SHOP Refno 123456789003. If not you, report it to your bank. -SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 42050,
+        "mentioned_amounts_paise": [
+          42050
+        ],
+        "merchant": "COFFEE SHOP",
+        "account_last4": "5678",
+        "card_last4": null,
+        "reference": "123456789003"
+      }
+    },
+    {
+      "id": "upi-sbi-avl-bal-004",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear Customer, Your A/C XXXXX910826 has a debit by transfer of Rs 147.50 on 20/08/26. Avl Bal Rs 800.50.-SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 14750,
+        "mentioned_amounts_paise": [
+          14750,
+          80050
+        ],
+        "merchant": null,
+        "account_last4": "0826",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-axis-p2m-005",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Debit INR 500.00 A/c no. XX8926 on 12-08-26. Info- UPI/P2M/123456789004/ZOMATO. Avl Bal- INR 5,000.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000,
+          500000
+        ],
+        "merchant": "ZOMATO",
+        "account_last4": "8926",
+        "card_last4": null,
+        "reference": "123456789004"
+      }
+    },
+    {
+      "id": "upi-kotak-vpa-006",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Kotak",
+      "sender_header": "KOTAKB",
+      "raw_sms": "Sent Rs.250.00 from Kotak Bank AC X2468 to swiggy@ybl on 12-08-26. UPI Ref 123456789005.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 25000,
+        "mentioned_amounts_paise": [
+          25000
+        ],
+        "merchant": "swiggy",
+        "account_last4": "2468",
+        "card_last4": null,
+        "reference": "123456789005"
+      }
+    },
+    {
+      "id": "upi-federal-vpa-007",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Federal Bank",
+      "sender_header": "FEDBNK",
+      "raw_sms": "Rs 50.00 debited from your A/c using UPI on 03-08-26 16:44:28 to VPA cafe4321@oksbi - UPI Ref No 123456789006 - Federal Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 5000,
+        "mentioned_amounts_paise": [
+          5000
+        ],
+        "merchant": "cafe4321",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789006"
+      }
+    },
+    {
+      "id": "upi-uco-short-008",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "UCO Bank",
+      "sender_header": "UCOBNK",
+      "raw_sms": "A/c XX8360 Debited with Rs. 19.00 on 07-08-2026 by UCO-UPI. Avl Bal Rs.32.98. Report disputes through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 1900,
+        "mentioned_amounts_paise": [
+          1900,
+          3298
+        ],
+        "merchant": null,
+        "account_last4": "8360",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-union-mobile-bank-009",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Union Bank",
+      "sender_header": "UNIONB",
+      "raw_sms": "A/c *9172 Debited for Rs:50.00 on 11-08-2026 19:44:40 by Mob Bk ref no 123456789007 Avl Bal Rs:1870.55. -Union Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 5000,
+        "mentioned_amounts_paise": [
+          5000,
+          187055
+        ],
+        "merchant": null,
+        "account_last4": "9172",
+        "card_last4": null,
+        "reference": "123456789007"
+      }
+    },
+    {
+      "id": "bank-account-deducted-010",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "An amount of Rs 500 has been deducted from your account ending with 3187 on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": null,
+        "account_last4": "3187",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "netbanking-hdfc-011",
+      "source_ids": [
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Thanks for paying Rs.21,660.00 from A/c XXXX1111 to CBDT TAX via HDFC Bank NetBanking. Please contact the bank if this was not you.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 2166000,
+        "mentioned_amounts_paise": [
+          2166000
+        ],
+        "merchant": "CBDT TAX",
+        "account_last4": "1111",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "card-hdfc-debit-012",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCDC",
+      "raw_sms": "Thank you for using your HDFC Bank Debit Card ending 4321 for INR 749.00 towards SAMPLE MART in Bengaluru at 2026-08-12 18:20:00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 74900,
+        "mentioned_amounts_paise": [
+          74900
+        ],
+        "merchant": "SAMPLE MART",
+        "account_last4": null,
+        "card_last4": "4321",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-hdfc-credit-013",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "INR 1,999.00 spent on HDFC Bank CREDIT Card ending 7788 at AMAZON on 2026-08-12 18:20:00. Avl bal INR 48,001.00, curr o/s INR 12,999.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 199900,
+        "mentioned_amounts_paise": [
+          199900,
+          4800100,
+          1299900
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "7788",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-sbi-credit-014",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Rs.3,499.00 spent on your SBI Credit Card ending 1122 at FLIPKART on 12-08-26. Your available limit is Rs.1,23,500.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 349900,
+        "mentioned_amounts_paise": [
+          349900,
+          12350000
+        ],
+        "merchant": "FLIPKART",
+        "account_last4": null,
+        "card_last4": "1122",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-axis-verb-first-015",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Spent Card no. XX3344 INR 449.00 05-08-26 20:15:32 SWIGGY Avl Lmt INR 55,000. Not you? Report it through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 44900,
+        "mentioned_amounts_paise": [
+          44900,
+          5500000
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "3344",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-icici-016",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "INR 500.00 spent using ICICI Bank Card XX5678 on 06-Aug-26 at Swiggy. Avl Limit: INR 1,50,000.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000,
+          15000000
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "5678",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-generic-spent-017",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.500.00 has been spent on your Card XX1234 at BIGBAZAAR.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": "1234",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-rupay-upi-018",
+      "source_ids": [
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.699.00 has been debited from your HDFC Bank RuPay Credit Card XX5566 to grocery@upi on 12-08-26. UPI Ref 123456789008.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 69900,
+        "mentioned_amounts_paise": [
+          69900
+        ],
+        "merchant": "grocery",
+        "account_last4": null,
+        "card_last4": "5566",
+        "reference": "123456789008"
+      }
+    },
+    {
+      "id": "atm-withdrawal-019",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "atm",
+      "bank_or_app": "SBI",
+      "sender_header": "ATMSBI",
+      "raw_sms": "Rs.2,000 withdrawn from A/c XX1234 at ATM SECTOR 18 on 12-08-26. Avl Bal Rs.8,000.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 200000,
+        "mentioned_amounts_paise": [
+          200000,
+          800000
+        ],
+        "merchant": "ATM SECTOR 18",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "imps-debit-020",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.12,000.00 debited from A/c XX1234 via IMPS on 05-08-26 Ref N186212345678 to NAME SURNAME. Avl Bal Rs.8,000.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 1200000,
+        "mentioned_amounts_paise": [
+          1200000,
+          800000
+        ],
+        "merchant": "NAME SURNAME",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": "N186212345678"
+      }
+    },
+    {
+      "id": "wallet-debit-021",
+      "source_ids": [
+        "transaction_sms_parser_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.250 debited from Paytm wallet. Available bal Rs.750.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 25000,
+        "mentioned_amounts_paise": [
+          25000,
+          75000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-paid-vpa-022",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Google Pay",
+      "sender_header": "GPay",
+      "raw_sms": "Rs.420.50 paid to zomato@paytm from A/c XX1234 on 12-08-26. UPI Ref No 123456789009.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 42050,
+        "mentioned_amounts_paise": [
+          42050
+        ],
+        "merchant": "zomato",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": "123456789009"
+      }
+    },
+    {
+      "id": "upi-app-order-023",
+      "source_ids": [
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Payment Confirmed! Your Swiggy Order #EXAMPLE001 of Rs.356.0 was successfully paid on 26/08/2026 at 10:38 PM. Txn ID: 123456789010.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 35600,
+        "mentioned_amounts_paise": [
+          35600
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789010"
+      }
+    },
+    {
+      "id": "upi-decimal-024",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "₹99.5 debited from A/c XX1234 at CHAI POINT on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 9950,
+        "mentioned_amounts_paise": [
+          9950
+        ],
+        "merchant": "CHAI POINT",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "card-annual-fee-025",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your Debit card annual fee of Rs.399.00 has been debited from your account.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 39900,
+        "mentioned_amounts_paise": [
+          39900
+        ],
+        "merchant": "DEBIT CARD ANNUAL FEE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-credit-026",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear SBI UPI User, ur A/c X0429 credited by Rs500 on 04Aug26 by Ref no 123456789011.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 50000,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": null,
+        "account_last4": "0429",
+        "card_last4": null,
+        "reference": "123456789011"
+      }
+    },
+    {
+      "id": "upi-credit-vpa-027",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "HDFC Bank: Rs.1.00 credited to a/c XXXXXX2002 on 23-08-26 by a/c linked to VPA example@fam (UPI Ref No 123456789012).",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 100,
+        "mentioned_amounts_paise": [
+          100
+        ],
+        "merchant": "example",
+        "account_last4": "2002",
+        "card_last4": null,
+        "reference": "123456789012"
+      }
+    },
+    {
+      "id": "salary-neft-credit-028",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "credit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.1,50,000.00 credited to A/c XX1234 on 01-08-26 by NEFT Ref N186212345679 (EXAMPLE CORP SALARY). Avl Bal Rs.1,82,000.00",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 15000000,
+        "mentioned_amounts_paise": [
+          15000000,
+          18200000
+        ],
+        "merchant": "EXAMPLE CORP SALARY",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": "N186212345679"
+      }
+    },
+    {
+      "id": "card-payment-credit-029",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "credit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Your payment of Rs.1,644.55 has been credited to your SBI Credit Card ending with 5667. Your available limit is Rs.48,355.45.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 164455,
+        "mentioned_amounts_paise": [
+          164455,
+          4835545
+        ],
+        "merchant": "CREDIT CARD PAYMENT",
+        "account_last4": null,
+        "card_last4": "5667",
+        "reference": null
+      }
+    },
+    {
+      "id": "card-refund-030",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "refund",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.1,299.00 has been refunded to your HDFC Bank Card x1234 by AMAZON.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 129900,
+        "mentioned_amounts_paise": [
+          129900
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1234",
+        "reference": null
+      }
+    },
+    {
+      "id": "bank-refund-031",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "refund",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.499.00 credited to your A/c XX1234 on 06-08-26 towards refund from AMAZON Ref 123456789013.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 49900,
+        "mentioned_amounts_paise": [
+          49900
+        ],
+        "merchant": "AMAZON",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": "123456789013"
+      }
+    },
+    {
+      "id": "wallet-cashback-032",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Yay! Rs.15 cashback credited to your Paytm wallet for your movie booking. Updated balance Rs.265.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1500,
+          26500
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "wallet-topup-033",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "credit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.750.00 received in your Paytm wallet from A/c XX1234. Wallet balance Rs.2,000.00.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 75000,
+        "mentioned_amounts_paise": [
+          75000,
+          200000
+        ],
+        "merchant": null,
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-reversal-034",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "reversal",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Your UPI transaction of 88.00 has been reversed in your account due to a technical problem. UPI Ref no. 123456789014",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 8800,
+        "mentioned_amounts_paise": [
+          8800
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789014"
+      }
+    },
+    {
+      "id": "card-reversal-035",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "reversal",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Transaction Reversed! On HDFC Bank CREDIT Card xx5555 Amt: Rs.862.16 By AMAZON on 2026-08-21 05:20:26",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 86216,
+        "mentioned_amounts_paise": [
+          86216
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "5555",
+        "reference": null
+      }
+    },
+    {
+      "id": "balance-only-036",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Your A/c XX1234 balance is Rs.15,230.50 as on 12-Aug-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1523050
+        ],
+        "merchant": null,
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "available-balance-037",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Avl Bal in A/c XX1234 is Rs.15,230.50 as on 12-Aug-26. Use the app for details.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1523050
+        ],
+        "merchant": null,
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "credit-limit-038",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Good news! Your credit limit is now Rs.2,00,000 on your ICICI Bank Card XX1234.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          20000000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "1234",
+        "reference": null
+      }
+    },
+    {
+      "id": "monthly-spend-summary-039",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "You have spent Rs.45,000 on your HDFC card this month. View your spend analysis.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          4500000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "declined-card-040",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "declined",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Txn of Rs.2,500.00 at AMAZON on your HDFC Bank Card x1234 was declined due to insufficient limit.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          250000
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1234",
+        "reference": null
+      }
+    },
+    {
+      "id": "failed-payment-041",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "failed",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your payment of Rs.899.00 to SWIGGY has failed. No amount has been debited from A/c XX1234.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          89900
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "otp-amount-042",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "123456 is the OTP for your transaction of Rs.2,500.00 at AMAZON. Do not share.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          250000
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "otp-code-last-043",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "SBI",
+      "sender_header": "SBICRD",
+      "raw_sms": "OTP for txn of Rs.2,500.00 at AMAZON on your SBI Debit Card is 456789. Never share it.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          250000
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "cashback-promo-044",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Flat Rs.500 off! Spend Rs.2,000 and get cashback. Shop now at BIGBAZAAR.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          50000,
+          200000
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "loan-marketing-045",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Congratulations! A pre-approved personal loan of Rs.5,00,000 awaits you. Click to apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          50000000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "card-bill-total-046",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Your HDFC Credit Card statement has been generated. Total Amount Due Rs.5,000.00. Pay by 28-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          500000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "card-bill-minimum-047",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Dear Customer, Total Payment of INR 2,011.86 on Credit Card A/c 4xxx5006 is due. Pay minimum amount of INR 100.59 by 12-AUG-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          201186,
+          10059
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "5006",
+        "reference": null
+      }
+    },
+    {
+      "id": "emi-upcoming-048",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Reminder: Rs.5,000.00 will be debited from your A/c XX1234 on 15-Aug-26 towards HOME LOAN EMI.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          500000
+        ],
+        "merchant": "HOME LOAN EMI",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "autopay-due-049",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "upcoming",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.199.00 is due on 15-Aug-26 for your NETFLIX subscription. Please maintain balance.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          19900
+        ],
+        "merchant": "NETFLIX",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "sip-upcoming-050",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Your SIP of Rs.5,000.00 will be deducted from A/c XX1234 on 05-Sep-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          500000
+        ],
+        "merchant": "SIP",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "mandate-blocked-051",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "mandate",
+      "rail": "bank_account",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "UPI mandate has been successfully created towards SAMPLE SUBSCRIPTION for INR 15,000.00. Funds blocked from A/c no. XX8926.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1500000
+        ],
+        "merchant": "SAMPLE SUBSCRIPTION",
+        "account_last4": "8926",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "mobile-recharge-052",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "PhonePe",
+      "sender_header": "PHONEPE",
+      "raw_sms": "Mobile recharge of Rs.299.00 for number ending 1234 was successful. Recharge ID EXAMPLE001.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          29900
+        ],
+        "merchant": "MOBILE RECHARGE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "EXAMPLE001"
+      }
+    },
+    {
+      "id": "cheque-returned-053",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Cheque no. 000123 for Rs.25,000.00 deposited in A/c XX1234 has been returned unpaid. Charges may apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          2500000
+        ],
+        "merchant": null,
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "personal-contact-054",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN",
+      "raw_sms": "Hey, I paid you ₹500 for dinner, sent via phonepe!",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          50000
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "no-amount-055",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your card was used for a transaction. Check the bank app for details.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "phishing-debit-056",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN_PHONE",
+      "raw_sms": "Rs.10,000.00 debited from A/c XX1234 on 12-08-26. If not you, click example.invalid to block.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1000000
+        ],
+        "merchant": null,
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "amount-over-cap-057",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_adversarial",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.5,00,00,000 debited from A/c XX1234 towards SETTLEMENT on 12-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          5000000000
+        ],
+        "merchant": "SETTLEMENT",
+        "account_last4": "1234",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "bank-account-avl-bal-058",
+      "source_ids": [
+        "transaction_sms_parser_test_corpus_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_rewrite",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "SAMPLE BANK",
+      "sender_header": "SAMPLEBK",
+      "raw_sms": "INR 2,400 debited from A/c no. XX3423 on 18-Aug-26 at SAMPLE STORE. Avl Bal- INR 2,343.23.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 240000,
+        "mentioned_amounts_paise": [
+          240000,
+          234323
+        ],
+        "merchant": "SAMPLE STORE",
+        "account_last4": "3423",
+        "card_last4": null,
+        "reference": null
+      }
+    },
+    {
+      "id": "upi-hdfc-multiline-001-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Sent Rs.637.00\\nFrom HDFC Bank A/C XX1371\\nTo SWIGGY\\nOn 12/08/26\\nRef 123456789138\\nNot You? Report it to your bank.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": "123456789138"
+      },
+      "variant_of": "upi-hdfc-multiline-001"
+    },
+    {
+      "id": "upi-hdfc-multiline-001-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Sent Rs.774.00\\nFrom HDFC Bank A/C XX1508\\nTo SWIGGY\\nOn 12/08/26\\nRef 123456789275\\nNot You? Report it to your bank.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": "123456789275"
+      },
+      "variant_of": "upi-hdfc-multiline-001"
+    },
+    {
+      "id": "upi-hdfc-vpa-002-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Rs.637.00 debited from A/c XX4458 on 20-Aug-26 to merchant@upi (UPI Ref No 123456789139)",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": "merchant",
+        "account_last4": "4458",
+        "card_last4": null,
+        "reference": "123456789139"
+      },
+      "variant_of": "upi-hdfc-vpa-002"
+    },
+    {
+      "id": "upi-hdfc-vpa-002-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Rs.774.00 debited from A/c XX4595 on 20-Aug-26 to merchant@upi (UPI Ref No 123456789276)",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": "merchant",
+        "account_last4": "4595",
+        "card_last4": null,
+        "reference": "123456789276"
+      },
+      "variant_of": "upi-hdfc-vpa-002"
+    },
+    {
+      "id": "upi-sbi-currencyless-003-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear UPI user A/C X5815 debited by 557.50 on date 12Aug26 trf to COFFEE SHOP Refno 123456789140. If not you, report it to your bank. -SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 55750,
+        "mentioned_amounts_paise": [
+          55750
+        ],
+        "merchant": "COFFEE SHOP",
+        "account_last4": "5815",
+        "card_last4": null,
+        "reference": "123456789140"
+      },
+      "variant_of": "upi-sbi-currencyless-003"
+    },
+    {
+      "id": "upi-sbi-currencyless-003-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear UPI user A/C X5952 debited by 694.50 on date 12Aug26 trf to COFFEE SHOP Refno 123456789277. If not you, report it to your bank. -SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 69450,
+        "mentioned_amounts_paise": [
+          69450
+        ],
+        "merchant": "COFFEE SHOP",
+        "account_last4": "5952",
+        "card_last4": null,
+        "reference": "123456789277"
+      },
+      "variant_of": "upi-sbi-currencyless-003"
+    },
+    {
+      "id": "upi-sbi-avl-bal-004-v1",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear Customer, Your A/C XXXXX910963 has a debit by transfer of Rs 284.50 on 20/08/26. Avl Bal Rs 937.50.-SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 28450,
+        "mentioned_amounts_paise": [
+          28450,
+          93750
+        ],
+        "merchant": null,
+        "account_last4": "0963",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-sbi-avl-bal-004"
+    },
+    {
+      "id": "upi-sbi-avl-bal-004-v2",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear Customer, Your A/C XXXXX911100 has a debit by transfer of Rs 421.50 on 20/08/26. Avl Bal Rs 1074.50.-SBI",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 42150,
+        "mentioned_amounts_paise": [
+          42150,
+          107450
+        ],
+        "merchant": null,
+        "account_last4": "1100",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-sbi-avl-bal-004"
+    },
+    {
+      "id": "upi-axis-p2m-005-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Debit INR 637.00 A/c no. XX9063 on 12-08-26. Info- UPI/P2M/123456789141/ZOMATO. Avl Bal- INR 5,137.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700,
+          513700
+        ],
+        "merchant": "ZOMATO",
+        "account_last4": "9063",
+        "card_last4": null,
+        "reference": "123456789141"
+      },
+      "variant_of": "upi-axis-p2m-005"
+    },
+    {
+      "id": "upi-axis-p2m-005-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Debit INR 774.00 A/c no. XX9200 on 12-08-26. Info- UPI/P2M/123456789278/ZOMATO. Avl Bal- INR 5,274.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400,
+          527400
+        ],
+        "merchant": "ZOMATO",
+        "account_last4": "9200",
+        "card_last4": null,
+        "reference": "123456789278"
+      },
+      "variant_of": "upi-axis-p2m-005"
+    },
+    {
+      "id": "upi-kotak-vpa-006-v1",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Kotak",
+      "sender_header": "KOTAKB",
+      "raw_sms": "Sent Rs.387.00 from Kotak Bank AC X2605 to swiggy@ybl on 12-08-26. UPI Ref 123456789142.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 38700,
+        "mentioned_amounts_paise": [
+          38700
+        ],
+        "merchant": "swiggy",
+        "account_last4": "2605",
+        "card_last4": null,
+        "reference": "123456789142"
+      },
+      "variant_of": "upi-kotak-vpa-006"
+    },
+    {
+      "id": "upi-kotak-vpa-006-v2",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Kotak",
+      "sender_header": "KOTAKB",
+      "raw_sms": "Sent Rs.524.00 from Kotak Bank AC X2742 to swiggy@ybl on 12-08-26. UPI Ref 123456789279.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 52400,
+        "mentioned_amounts_paise": [
+          52400
+        ],
+        "merchant": "swiggy",
+        "account_last4": "2742",
+        "card_last4": null,
+        "reference": "123456789279"
+      },
+      "variant_of": "upi-kotak-vpa-006"
+    },
+    {
+      "id": "upi-federal-vpa-007-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Federal Bank",
+      "sender_header": "FEDBNK",
+      "raw_sms": "Rs 187.00 debited from your A/c using UPI on 03-08-26 16:44:28 to VPA cafe4321@oksbi - UPI Ref No 123456789143 - Federal Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 18700,
+        "mentioned_amounts_paise": [
+          18700
+        ],
+        "merchant": "cafe4321",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789143"
+      },
+      "variant_of": "upi-federal-vpa-007"
+    },
+    {
+      "id": "upi-federal-vpa-007-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Federal Bank",
+      "sender_header": "FEDBNK",
+      "raw_sms": "Rs 324.00 debited from your A/c using UPI on 03-08-26 16:44:28 to VPA cafe4321@oksbi - UPI Ref No 123456789280 - Federal Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 32400,
+        "mentioned_amounts_paise": [
+          32400
+        ],
+        "merchant": "cafe4321",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789280"
+      },
+      "variant_of": "upi-federal-vpa-007"
+    },
+    {
+      "id": "upi-uco-short-008-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "UCO Bank",
+      "sender_header": "UCOBNK",
+      "raw_sms": "A/c XX8497 Debited with Rs. 156.00 on 07-08-2026 by UCO-UPI. Avl Bal Rs.169.98. Report disputes through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 15600,
+        "mentioned_amounts_paise": [
+          15600,
+          16998
+        ],
+        "merchant": null,
+        "account_last4": "8497",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-uco-short-008"
+    },
+    {
+      "id": "upi-uco-short-008-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "UCO Bank",
+      "sender_header": "UCOBNK",
+      "raw_sms": "A/c XX8634 Debited with Rs. 293.00 on 07-08-2026 by UCO-UPI. Avl Bal Rs.306.98. Report disputes through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 29300,
+        "mentioned_amounts_paise": [
+          29300,
+          30698
+        ],
+        "merchant": null,
+        "account_last4": "8634",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-uco-short-008"
+    },
+    {
+      "id": "upi-union-mobile-bank-009-v1",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Union Bank",
+      "sender_header": "UNIONB",
+      "raw_sms": "A/c *9309 Debited for Rs:187.00 on 11-08-2026 19:44:40 by Mob Bk ref no 123456789144 Avl Bal Rs:2007.55. -Union Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 18700,
+        "mentioned_amounts_paise": [
+          18700,
+          200755
+        ],
+        "merchant": null,
+        "account_last4": "9309",
+        "card_last4": null,
+        "reference": "123456789144"
+      },
+      "variant_of": "upi-union-mobile-bank-009"
+    },
+    {
+      "id": "upi-union-mobile-bank-009-v2",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Union Bank",
+      "sender_header": "UNIONB",
+      "raw_sms": "A/c *9446 Debited for Rs:324.00 on 11-08-2026 19:44:40 by Mob Bk ref no 123456789281 Avl Bal Rs:2144.55. -Union Bank",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 32400,
+        "mentioned_amounts_paise": [
+          32400,
+          214455
+        ],
+        "merchant": null,
+        "account_last4": "9446",
+        "card_last4": null,
+        "reference": "123456789281"
+      },
+      "variant_of": "upi-union-mobile-bank-009"
+    },
+    {
+      "id": "bank-account-deducted-010-v1",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "An amount of Rs 637 has been deducted from your account ending with 3324 on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": null,
+        "account_last4": "3324",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "bank-account-deducted-010"
+    },
+    {
+      "id": "bank-account-deducted-010-v2",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "An amount of Rs 774 has been deducted from your account ending with 3461 on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": null,
+        "account_last4": "3461",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "bank-account-deducted-010"
+    },
+    {
+      "id": "netbanking-hdfc-011-v1",
+      "source_ids": [
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Thanks for paying Rs.21,797.00 from A/c XXXX1248 to CBDT TAX via HDFC Bank NetBanking. Please contact the bank if this was not you.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 2179700,
+        "mentioned_amounts_paise": [
+          2179700
+        ],
+        "merchant": "CBDT TAX",
+        "account_last4": "1248",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "netbanking-hdfc-011"
+    },
+    {
+      "id": "netbanking-hdfc-011-v2",
+      "source_ids": [
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Thanks for paying Rs.21,934.00 from A/c XXXX1385 to CBDT TAX via HDFC Bank NetBanking. Please contact the bank if this was not you.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 2193400,
+        "mentioned_amounts_paise": [
+          2193400
+        ],
+        "merchant": "CBDT TAX",
+        "account_last4": "1385",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "netbanking-hdfc-011"
+    },
+    {
+      "id": "card-hdfc-debit-012-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCDC",
+      "raw_sms": "Thank you for using your HDFC Bank Debit Card ending 4458 for INR 886.00 towards SAMPLE MART in Bengaluru at 2026-08-12 18:20:00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 88600,
+        "mentioned_amounts_paise": [
+          88600
+        ],
+        "merchant": "SAMPLE MART",
+        "account_last4": null,
+        "card_last4": "4458",
+        "reference": null
+      },
+      "variant_of": "card-hdfc-debit-012"
+    },
+    {
+      "id": "card-hdfc-debit-012-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCDC",
+      "raw_sms": "Thank you for using your HDFC Bank Debit Card ending 4595 for INR 1023.00 towards SAMPLE MART in Bengaluru at 2026-08-12 18:20:00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 102300,
+        "mentioned_amounts_paise": [
+          102300
+        ],
+        "merchant": "SAMPLE MART",
+        "account_last4": null,
+        "card_last4": "4595",
+        "reference": null
+      },
+      "variant_of": "card-hdfc-debit-012"
+    },
+    {
+      "id": "card-hdfc-credit-013-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "INR 2,136.00 spent on HDFC Bank CREDIT Card ending 7925 at AMAZON on 2026-08-12 18:20:00. Avl bal INR 48,138.00, curr o/s INR 13,136.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 213600,
+        "mentioned_amounts_paise": [
+          213600,
+          4813800,
+          1313600
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "7925",
+        "reference": null
+      },
+      "variant_of": "card-hdfc-credit-013"
+    },
+    {
+      "id": "card-hdfc-credit-013-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "INR 2,273.00 spent on HDFC Bank CREDIT Card ending 8062 at AMAZON on 2026-08-12 18:20:00. Avl bal INR 48,275.00, curr o/s INR 13,273.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 227300,
+        "mentioned_amounts_paise": [
+          227300,
+          4827500,
+          1327300
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "8062",
+        "reference": null
+      },
+      "variant_of": "card-hdfc-credit-013"
+    },
+    {
+      "id": "card-sbi-credit-014-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Rs.3,636.00 spent on your SBI Credit Card ending 1259 at FLIPKART on 12-08-26. Your available limit is Rs.1,23,637.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 363600,
+        "mentioned_amounts_paise": [
+          363600,
+          12363700
+        ],
+        "merchant": "FLIPKART",
+        "account_last4": null,
+        "card_last4": "1259",
+        "reference": null
+      },
+      "variant_of": "card-sbi-credit-014"
+    },
+    {
+      "id": "card-sbi-credit-014-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Rs.3,773.00 spent on your SBI Credit Card ending 1396 at FLIPKART on 12-08-26. Your available limit is Rs.1,23,774.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 377300,
+        "mentioned_amounts_paise": [
+          377300,
+          12377400
+        ],
+        "merchant": "FLIPKART",
+        "account_last4": null,
+        "card_last4": "1396",
+        "reference": null
+      },
+      "variant_of": "card-sbi-credit-014"
+    },
+    {
+      "id": "card-axis-verb-first-015-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Spent Card no. XX3481 INR 586.00 05-08-26 20:15:32 SWIGGY Avl Lmt INR 55,137. Not you? Report it through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 58600,
+        "mentioned_amounts_paise": [
+          58600,
+          5513700
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "3481",
+        "reference": null
+      },
+      "variant_of": "card-axis-verb-first-015"
+    },
+    {
+      "id": "card-axis-verb-first-015-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "Spent Card no. XX3618 INR 723.00 05-08-26 20:15:32 SWIGGY Avl Lmt INR 55,274. Not you? Report it through the bank app.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 72300,
+        "mentioned_amounts_paise": [
+          72300,
+          5527400
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "3618",
+        "reference": null
+      },
+      "variant_of": "card-axis-verb-first-015"
+    },
+    {
+      "id": "card-icici-016-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "INR 637.00 spent using ICICI Bank Card XX5815 on 06-Aug-26 at Swiggy. Avl Limit: INR 1,50,137.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700,
+          15013700
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "5815",
+        "reference": null
+      },
+      "variant_of": "card-icici-016"
+    },
+    {
+      "id": "card-icici-016-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "INR 774.00 spent using ICICI Bank Card XX5952 on 06-Aug-26 at Swiggy. Avl Limit: INR 1,50,274.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400,
+          15027400
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": "5952",
+        "reference": null
+      },
+      "variant_of": "card-icici-016"
+    },
+    {
+      "id": "card-generic-spent-017-v1",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.637.00 has been spent on your Card XX1371 at BIGBAZAAR.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": "1371",
+        "reference": null
+      },
+      "variant_of": "card-generic-spent-017"
+    },
+    {
+      "id": "card-generic-spent-017-v2",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.774.00 has been spent on your Card XX1508 at BIGBAZAAR.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": "1508",
+        "reference": null
+      },
+      "variant_of": "card-generic-spent-017"
+    },
+    {
+      "id": "card-rupay-upi-018-v1",
+      "source_ids": [
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.836.00 has been debited from your HDFC Bank RuPay Credit Card XX5703 to grocery@upi on 12-08-26. UPI Ref 123456789145.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 83600,
+        "mentioned_amounts_paise": [
+          83600
+        ],
+        "merchant": "grocery",
+        "account_last4": null,
+        "card_last4": "5703",
+        "reference": "123456789145"
+      },
+      "variant_of": "card-rupay-upi-018"
+    },
+    {
+      "id": "card-rupay-upi-018-v2",
+      "source_ids": [
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.973.00 has been debited from your HDFC Bank RuPay Credit Card XX5840 to grocery@upi on 12-08-26. UPI Ref 123456789282.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 97300,
+        "mentioned_amounts_paise": [
+          97300
+        ],
+        "merchant": "grocery",
+        "account_last4": null,
+        "card_last4": "5840",
+        "reference": "123456789282"
+      },
+      "variant_of": "card-rupay-upi-018"
+    },
+    {
+      "id": "atm-withdrawal-019-v1",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "atm",
+      "bank_or_app": "SBI",
+      "sender_header": "ATMSBI",
+      "raw_sms": "Rs.2,137 withdrawn from A/c XX1371 at ATM SECTOR 18 on 12-08-26. Avl Bal Rs.8,137.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 213700,
+        "mentioned_amounts_paise": [
+          213700,
+          813700
+        ],
+        "merchant": "ATM SECTOR 18",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "atm-withdrawal-019"
+    },
+    {
+      "id": "atm-withdrawal-019-v2",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "atm",
+      "bank_or_app": "SBI",
+      "sender_header": "ATMSBI",
+      "raw_sms": "Rs.2,274 withdrawn from A/c XX1508 at ATM SECTOR 18 on 12-08-26. Avl Bal Rs.8,274.00.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 227400,
+        "mentioned_amounts_paise": [
+          227400,
+          827400
+        ],
+        "merchant": "ATM SECTOR 18",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "atm-withdrawal-019"
+    },
+    {
+      "id": "imps-debit-020-v1",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.12,137.00 debited from A/c XX1371 via IMPS on 05-08-26 Ref N186212345815 to NAME SURNAME. Avl Bal Rs.8,137.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 1213700,
+        "mentioned_amounts_paise": [
+          1213700,
+          813700
+        ],
+        "merchant": "NAME SURNAME",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": "N186212345815"
+      },
+      "variant_of": "imps-debit-020"
+    },
+    {
+      "id": "imps-debit-020-v2",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.12,274.00 debited from A/c XX1508 via IMPS on 05-08-26 Ref N186212345952 to NAME SURNAME. Avl Bal Rs.8,274.00",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 1227400,
+        "mentioned_amounts_paise": [
+          1227400,
+          827400
+        ],
+        "merchant": "NAME SURNAME",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": "N186212345952"
+      },
+      "variant_of": "imps-debit-020"
+    },
+    {
+      "id": "wallet-debit-021-v1",
+      "source_ids": [
+        "transaction_sms_parser_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.387 debited from Paytm wallet. Available bal Rs.887.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 38700,
+        "mentioned_amounts_paise": [
+          38700,
+          88700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-debit-021"
+    },
+    {
+      "id": "wallet-debit-021-v2",
+      "source_ids": [
+        "transaction_sms_parser_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.524 debited from Paytm wallet. Available bal Rs.1024.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 52400,
+        "mentioned_amounts_paise": [
+          52400,
+          102400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-debit-021"
+    },
+    {
+      "id": "upi-paid-vpa-022-v1",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Google Pay",
+      "sender_header": "GPay",
+      "raw_sms": "Rs.557.50 paid to zomato@paytm from A/c XX1371 on 12-08-26. UPI Ref No 123456789146.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 55750,
+        "mentioned_amounts_paise": [
+          55750
+        ],
+        "merchant": "zomato",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": "123456789146"
+      },
+      "variant_of": "upi-paid-vpa-022"
+    },
+    {
+      "id": "upi-paid-vpa-022-v2",
+      "source_ids": [
+        "omoi_mit",
+        "transaction_sms_parser_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Google Pay",
+      "sender_header": "GPay",
+      "raw_sms": "Rs.694.50 paid to zomato@paytm from A/c XX1508 on 12-08-26. UPI Ref No 123456789283.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 69450,
+        "mentioned_amounts_paise": [
+          69450
+        ],
+        "merchant": "zomato",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": "123456789283"
+      },
+      "variant_of": "upi-paid-vpa-022"
+    },
+    {
+      "id": "upi-app-order-023-v1",
+      "source_ids": [
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Payment Confirmed! Your Swiggy Order #EXAMPLE001 of Rs.493.00 was successfully paid on 26/08/2026 at 10:38 PM. Txn ID: 123456789147.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 49300,
+        "mentioned_amounts_paise": [
+          49300
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789147"
+      },
+      "variant_of": "upi-app-order-023"
+    },
+    {
+      "id": "upi-app-order-023-v2",
+      "source_ids": [
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Payment Confirmed! Your Swiggy Order #EXAMPLE001 of Rs.630.00 was successfully paid on 26/08/2026 at 10:38 PM. Txn ID: 123456789284.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 63000,
+        "mentioned_amounts_paise": [
+          63000
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789284"
+      },
+      "variant_of": "upi-app-order-023"
+    },
+    {
+      "id": "upi-decimal-024-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "₹236.50 debited from A/c XX1371 at CHAI POINT on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 23650,
+        "mentioned_amounts_paise": [
+          23650
+        ],
+        "merchant": "CHAI POINT",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-decimal-024"
+    },
+    {
+      "id": "upi-decimal-024-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "₹373.50 debited from A/c XX1508 at CHAI POINT on 12-08-26.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 37350,
+        "mentioned_amounts_paise": [
+          37350
+        ],
+        "merchant": "CHAI POINT",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "upi-decimal-024"
+    },
+    {
+      "id": "card-annual-fee-025-v1",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your Debit card annual fee of Rs.536.00 has been debited from your account.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 53600,
+        "mentioned_amounts_paise": [
+          53600
+        ],
+        "merchant": "DEBIT CARD ANNUAL FEE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "card-annual-fee-025"
+    },
+    {
+      "id": "card-annual-fee-025-v2",
+      "source_ids": [
+        "auto_expense_gpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "card",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your Debit card annual fee of Rs.673.00 has been debited from your account.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 67300,
+        "mentioned_amounts_paise": [
+          67300
+        ],
+        "merchant": "DEBIT CARD ANNUAL FEE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "card-annual-fee-025"
+    },
+    {
+      "id": "upi-credit-026-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear SBI UPI User, ur A/c X0566 credited by Rs637 on 04Aug26 by Ref no 123456789148.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 63700,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": null,
+        "account_last4": "0566",
+        "card_last4": null,
+        "reference": "123456789148"
+      },
+      "variant_of": "upi-credit-026"
+    },
+    {
+      "id": "upi-credit-026-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "SBI",
+      "sender_header": "SBIUPI",
+      "raw_sms": "Dear SBI UPI User, ur A/c X0703 credited by Rs774 on 04Aug26 by Ref no 123456789285.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 77400,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": null,
+        "account_last4": "0703",
+        "card_last4": null,
+        "reference": "123456789285"
+      },
+      "variant_of": "upi-credit-026"
+    },
+    {
+      "id": "upi-credit-vpa-027-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "HDFC Bank: Rs.138.00 credited to a/c XXXXXX2139 on 23-08-26 by a/c linked to VPA example@fam (UPI Ref No 123456789149).",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 13800,
+        "mentioned_amounts_paise": [
+          13800
+        ],
+        "merchant": "example",
+        "account_last4": "2139",
+        "card_last4": null,
+        "reference": "123456789149"
+      },
+      "variant_of": "upi-credit-vpa-027"
+    },
+    {
+      "id": "upi-credit-vpa-027-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "HDFC Bank: Rs.275.00 credited to a/c XXXXXX2276 on 23-08-26 by a/c linked to VPA example@fam (UPI Ref No 123456789286).",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 27500,
+        "mentioned_amounts_paise": [
+          27500
+        ],
+        "merchant": "example",
+        "account_last4": "2276",
+        "card_last4": null,
+        "reference": "123456789286"
+      },
+      "variant_of": "upi-credit-vpa-027"
+    },
+    {
+      "id": "salary-neft-credit-028-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.1,50,137.00 credited to A/c XX1371 on 01-08-26 by NEFT Ref N186212345816 (EXAMPLE CORP SALARY). Avl Bal Rs.1,82,137.00",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 15013700,
+        "mentioned_amounts_paise": [
+          15013700,
+          18213700
+        ],
+        "merchant": "EXAMPLE CORP SALARY",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": "N186212345816"
+      },
+      "variant_of": "salary-neft-credit-028"
+    },
+    {
+      "id": "salary-neft-credit-028-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "transfer",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.1,50,274.00 credited to A/c XX1508 on 01-08-26 by NEFT Ref N186212345953 (EXAMPLE CORP SALARY). Avl Bal Rs.1,82,274.00",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 15027400,
+        "mentioned_amounts_paise": [
+          15027400,
+          18227400
+        ],
+        "merchant": "EXAMPLE CORP SALARY",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": "N186212345953"
+      },
+      "variant_of": "salary-neft-credit-028"
+    },
+    {
+      "id": "card-payment-credit-029-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Your payment of Rs.1,781.55 has been credited to your SBI Credit Card ending with 5804. Your available limit is Rs.48,492.45.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 178155,
+        "mentioned_amounts_paise": [
+          178155,
+          4849245
+        ],
+        "merchant": "CREDIT CARD PAYMENT",
+        "account_last4": null,
+        "card_last4": "5804",
+        "reference": null
+      },
+      "variant_of": "card-payment-credit-029"
+    },
+    {
+      "id": "card-payment-credit-029-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "card",
+      "bank_or_app": "SBI Card",
+      "sender_header": "SBICRD",
+      "raw_sms": "Your payment of Rs.1,918.55 has been credited to your SBI Credit Card ending with 5941. Your available limit is Rs.48,629.45.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 191855,
+        "mentioned_amounts_paise": [
+          191855,
+          4862945
+        ],
+        "merchant": "CREDIT CARD PAYMENT",
+        "account_last4": null,
+        "card_last4": "5941",
+        "reference": null
+      },
+      "variant_of": "card-payment-credit-029"
+    },
+    {
+      "id": "card-refund-030-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "refund",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.1,436.00 has been refunded to your HDFC Bank Card x1371 by AMAZON.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 143600,
+        "mentioned_amounts_paise": [
+          143600
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1371",
+        "reference": null
+      },
+      "variant_of": "card-refund-030"
+    },
+    {
+      "id": "card-refund-030-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "refund",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.1,573.00 has been refunded to your HDFC Bank Card x1508 by AMAZON.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 157300,
+        "mentioned_amounts_paise": [
+          157300
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1508",
+        "reference": null
+      },
+      "variant_of": "card-refund-030"
+    },
+    {
+      "id": "bank-refund-031-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "refund",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.636.00 credited to your A/c XX1371 on 06-08-26 towards refund from AMAZON Ref 123456789150.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 63600,
+        "mentioned_amounts_paise": [
+          63600
+        ],
+        "merchant": "AMAZON",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": "123456789150"
+      },
+      "variant_of": "bank-refund-031"
+    },
+    {
+      "id": "bank-refund-031-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "refund",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.773.00 credited to your A/c XX1508 on 06-08-26 towards refund from AMAZON Ref 123456789287.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 77300,
+        "mentioned_amounts_paise": [
+          77300
+        ],
+        "merchant": "AMAZON",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": "123456789287"
+      },
+      "variant_of": "bank-refund-031"
+    },
+    {
+      "id": "wallet-cashback-032-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Yay! Rs.152 cashback credited to your Paytm wallet for your movie booking. Updated balance Rs.402.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          15200,
+          40200
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-cashback-032"
+    },
+    {
+      "id": "wallet-cashback-032-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Yay! Rs.289 cashback credited to your Paytm wallet for your movie booking. Updated balance Rs.539.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          28900,
+          53900
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-cashback-032"
+    },
+    {
+      "id": "wallet-topup-033-v1",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.887.00 received in your Paytm wallet from A/c XX1371. Wallet balance Rs.2,137.00.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 88700,
+        "mentioned_amounts_paise": [
+          88700,
+          213700
+        ],
+        "merchant": null,
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-topup-033"
+    },
+    {
+      "id": "wallet-topup-033-v2",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "transaction_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "credit",
+      "rail": "wallet",
+      "bank_or_app": "Paytm",
+      "sender_header": "PAYTM",
+      "raw_sms": "Rs.1024.00 received in your Paytm wallet from A/c XX1508. Wallet balance Rs.2,274.00.",
+      "expected": {
+        "bookable": false,
+        "direction": "credit",
+        "currency": "INR",
+        "transaction_amount_paise": 102400,
+        "mentioned_amounts_paise": [
+          102400,
+          227400
+        ],
+        "merchant": null,
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "wallet-topup-033"
+    },
+    {
+      "id": "upi-reversal-034-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "reversal",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Your UPI transaction of 225.00 has been reversed in your account due to a technical problem. UPI Ref no. 123456789151",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 22500,
+        "mentioned_amounts_paise": [
+          22500
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789151"
+      },
+      "variant_of": "upi-reversal-034"
+    },
+    {
+      "id": "upi-reversal-034-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "reversal",
+      "rail": "upi",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Your UPI transaction of 362.00 has been reversed in your account due to a technical problem. UPI Ref no. 123456789288",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 36200,
+        "mentioned_amounts_paise": [
+          36200
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "123456789288"
+      },
+      "variant_of": "upi-reversal-034"
+    },
+    {
+      "id": "card-reversal-035-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "reversal",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Transaction Reversed! On HDFC Bank CREDIT Card xx5692 Amt: Rs.999.16 By AMAZON on 2026-08-21 05:20:26",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 99916,
+        "mentioned_amounts_paise": [
+          99916
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "5692",
+        "reference": null
+      },
+      "variant_of": "card-reversal-035"
+    },
+    {
+      "id": "card-reversal-035-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "reversal",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Transaction Reversed! On HDFC Bank CREDIT Card xx5829 Amt: Rs.1136.16 By AMAZON on 2026-08-21 05:20:26",
+      "expected": {
+        "bookable": false,
+        "direction": "reversal",
+        "currency": "INR",
+        "transaction_amount_paise": 113616,
+        "mentioned_amounts_paise": [
+          113616
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "5829",
+        "reference": null
+      },
+      "variant_of": "card-reversal-035"
+    },
+    {
+      "id": "balance-only-036-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Your A/c XX1371 balance is Rs.15,367.50 as on 12-Aug-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1536750
+        ],
+        "merchant": null,
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "balance-only-036"
+    },
+    {
+      "id": "balance-only-036-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Your A/c XX1508 balance is Rs.15,504.50 as on 12-Aug-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1550450
+        ],
+        "merchant": null,
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "balance-only-036"
+    },
+    {
+      "id": "available-balance-037-v1",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Avl Bal in A/c XX1371 is Rs.15,367.50 as on 12-Aug-26. Use the app for details.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1536750
+        ],
+        "merchant": null,
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "available-balance-037"
+    },
+    {
+      "id": "available-balance-037-v2",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "SBI",
+      "sender_header": "SBI",
+      "raw_sms": "Avl Bal in A/c XX1508 is Rs.15,504.50 as on 12-Aug-26. Use the app for details.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1550450
+        ],
+        "merchant": null,
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "available-balance-037"
+    },
+    {
+      "id": "credit-limit-038-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Good news! Your credit limit is now Rs.2,00,137 on your ICICI Bank Card XX1371.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          20013700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "1371",
+        "reference": null
+      },
+      "variant_of": "credit-limit-038"
+    },
+    {
+      "id": "credit-limit-038-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Good news! Your credit limit is now Rs.2,00,274 on your ICICI Bank Card XX1508.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          20027400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "1508",
+        "reference": null
+      },
+      "variant_of": "credit-limit-038"
+    },
+    {
+      "id": "monthly-spend-summary-039-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "You have spent Rs.45,137 on your HDFC card this month. View your spend analysis.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          4513700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "monthly-spend-summary-039"
+    },
+    {
+      "id": "monthly-spend-summary-039-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "You have spent Rs.45,274 on your HDFC card this month. View your spend analysis.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          4527400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "monthly-spend-summary-039"
+    },
+    {
+      "id": "declined-card-040-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "declined",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Txn of Rs.2,637.00 at AMAZON on your HDFC Bank Card x1371 was declined due to insufficient limit.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          263700
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1371",
+        "reference": null
+      },
+      "variant_of": "declined-card-040"
+    },
+    {
+      "id": "declined-card-040-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "declined",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Txn of Rs.2,774.00 at AMAZON on your HDFC Bank Card x1508 was declined due to insufficient limit.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          277400
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": "1508",
+        "reference": null
+      },
+      "variant_of": "declined-card-040"
+    },
+    {
+      "id": "failed-payment-041-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "failed",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your payment of Rs.1036.00 to SWIGGY has failed. No amount has been debited from A/c XX1371.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          103600
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "failed-payment-041"
+    },
+    {
+      "id": "failed-payment-041-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "failed",
+      "rail": "upi",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Your payment of Rs.1173.00 to SWIGGY has failed. No amount has been debited from A/c XX1508.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          117300
+        ],
+        "merchant": "SWIGGY",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "failed-payment-041"
+    },
+    {
+      "id": "otp-amount-042-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "123456 is the OTP for your transaction of Rs.2,637.00 at AMAZON. Do not share.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          263700
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "otp-amount-042"
+    },
+    {
+      "id": "otp-amount-042-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "123456 is the OTP for your transaction of Rs.2,774.00 at AMAZON. Do not share.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          277400
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "otp-amount-042"
+    },
+    {
+      "id": "otp-code-last-043-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "SBI",
+      "sender_header": "SBICRD",
+      "raw_sms": "OTP for txn of Rs.2,637.00 at AMAZON on your SBI Debit Card is 456789. Never share it.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          263700
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "otp-code-last-043"
+    },
+    {
+      "id": "otp-code-last-043-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "card",
+      "bank_or_app": "SBI",
+      "sender_header": "SBICRD",
+      "raw_sms": "OTP for txn of Rs.2,774.00 at AMAZON on your SBI Debit Card is 456789. Never share it.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          277400
+        ],
+        "merchant": "AMAZON",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "otp-code-last-043"
+    },
+    {
+      "id": "cashback-promo-044-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Flat Rs.637 off! Spend Rs.2,137 and get cashback. Shop now at BIGBAZAAR.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          63700,
+          213700
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "cashback-promo-044"
+    },
+    {
+      "id": "cashback-promo-044-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Swiggy",
+      "sender_header": "SWIGGY",
+      "raw_sms": "Flat Rs.774 off! Spend Rs.2,274 and get cashback. Shop now at BIGBAZAAR.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          77400,
+          227400
+        ],
+        "merchant": "BIGBAZAAR",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "cashback-promo-044"
+    },
+    {
+      "id": "loan-marketing-045-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Congratulations! A pre-approved personal loan of Rs.5,00,137 awaits you. Click to apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          50013700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "loan-marketing-045"
+    },
+    {
+      "id": "loan-marketing-045-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCBK",
+      "raw_sms": "Congratulations! A pre-approved personal loan of Rs.5,00,274 awaits you. Click to apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          50027400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "loan-marketing-045"
+    },
+    {
+      "id": "card-bill-total-046-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Your HDFC Credit Card statement has been generated. Total Amount Due Rs.5,137.00. Pay by 28-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          513700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "card-bill-total-046"
+    },
+    {
+      "id": "card-bill-total-046-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Your HDFC Credit Card statement has been generated. Total Amount Due Rs.5,274.00. Pay by 28-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          527400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "card-bill-total-046"
+    },
+    {
+      "id": "card-bill-minimum-047-v1",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Dear Customer, Total Payment of INR 2,148.86 on Credit Card A/c 4xxx5143 is due. Pay minimum amount of INR 237.59 by 12-AUG-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          214886,
+          23759
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "5143",
+        "reference": null
+      },
+      "variant_of": "card-bill-minimum-047"
+    },
+    {
+      "id": "card-bill-minimum-047-v2",
+      "source_ids": [
+        "omoi_mit",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "card_bill",
+      "rail": "card",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Dear Customer, Total Payment of INR 2,285.86 on Credit Card A/c 4xxx5280 is due. Pay minimum amount of INR 374.59 by 12-AUG-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          228586,
+          37459
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": "5280",
+        "reference": null
+      },
+      "variant_of": "card-bill-minimum-047"
+    },
+    {
+      "id": "emi-upcoming-048-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Reminder: Rs.5,137.00 will be debited from your A/c XX1371 on 15-Aug-26 towards HOME LOAN EMI.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          513700
+        ],
+        "merchant": "HOME LOAN EMI",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "emi-upcoming-048"
+    },
+    {
+      "id": "emi-upcoming-048-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Reminder: Rs.5,274.00 will be debited from your A/c XX1508 on 15-Aug-26 towards HOME LOAN EMI.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          527400
+        ],
+        "merchant": "HOME LOAN EMI",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "emi-upcoming-048"
+    },
+    {
+      "id": "autopay-due-049-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.336.00 is due on 15-Aug-26 for your NETFLIX subscription. Please maintain balance.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          33600
+        ],
+        "merchant": "NETFLIX",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "autopay-due-049"
+    },
+    {
+      "id": "autopay-due-049-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "card",
+      "bank_or_app": "HDFC",
+      "sender_header": "HDFCCC",
+      "raw_sms": "Rs.473.00 is due on 15-Aug-26 for your NETFLIX subscription. Please maintain balance.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          47300
+        ],
+        "merchant": "NETFLIX",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "autopay-due-049"
+    },
+    {
+      "id": "sip-upcoming-050-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Your SIP of Rs.5,137.00 will be deducted from A/c XX1371 on 05-Sep-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          513700
+        ],
+        "merchant": "SIP",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "sip-upcoming-050"
+    },
+    {
+      "id": "sip-upcoming-050-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "upcoming",
+      "rail": "bank_account",
+      "bank_or_app": "ICICI",
+      "sender_header": "ICICIB",
+      "raw_sms": "Your SIP of Rs.5,274.00 will be deducted from A/c XX1508 on 05-Sep-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "future",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          527400
+        ],
+        "merchant": "SIP",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "sip-upcoming-050"
+    },
+    {
+      "id": "mandate-blocked-051-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "mandate",
+      "rail": "bank_account",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "UPI mandate has been successfully created towards SAMPLE SUBSCRIPTION for INR 15,137.00. Funds blocked from A/c no. XX9063.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1513700
+        ],
+        "merchant": "SAMPLE SUBSCRIPTION",
+        "account_last4": "9063",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "mandate-blocked-051"
+    },
+    {
+      "id": "mandate-blocked-051-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern",
+        "auto_expense_gpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "mandate",
+      "rail": "bank_account",
+      "bank_or_app": "Axis",
+      "sender_header": "AXISBK",
+      "raw_sms": "UPI mandate has been successfully created towards SAMPLE SUBSCRIPTION for INR 15,274.00. Funds blocked from A/c no. XX9200.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1527400
+        ],
+        "merchant": "SAMPLE SUBSCRIPTION",
+        "account_last4": "9200",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "mandate-blocked-051"
+    },
+    {
+      "id": "mobile-recharge-052-v1",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "PhonePe",
+      "sender_header": "PHONEPE",
+      "raw_sms": "Mobile recharge of Rs.436.00 for number ending 1234 was successful. Recharge ID EXAMPLE138.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          43600
+        ],
+        "merchant": "MOBILE RECHARGE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "EXAMPLE138"
+      },
+      "variant_of": "mobile-recharge-052"
+    },
+    {
+      "id": "mobile-recharge-052-v2",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "wallet",
+      "bank_or_app": "PhonePe",
+      "sender_header": "PHONEPE",
+      "raw_sms": "Mobile recharge of Rs.573.00 for number ending 1234 was successful. Recharge ID EXAMPLE275.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          57300
+        ],
+        "merchant": "MOBILE RECHARGE",
+        "account_last4": null,
+        "card_last4": null,
+        "reference": "EXAMPLE275"
+      },
+      "variant_of": "mobile-recharge-052"
+    },
+    {
+      "id": "cheque-returned-053-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Cheque no. 000123 for Rs.25,137.00 deposited in A/c XX1371 has been returned unpaid. Charges may apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          2513700
+        ],
+        "merchant": null,
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "cheque-returned-053"
+    },
+    {
+      "id": "cheque-returned-053-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Cheque no. 000123 for Rs.25,274.00 deposited in A/c XX1508 has been returned unpaid. Charges may apply.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          2527400
+        ],
+        "merchant": null,
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "cheque-returned-053"
+    },
+    {
+      "id": "personal-contact-054-v1",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN",
+      "raw_sms": "Hey, I paid you ₹637 for dinner, sent via phonepe!",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          63700
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "personal-contact-054"
+    },
+    {
+      "id": "personal-contact-054-v2",
+      "source_ids": [
+        "upi_sms_parser_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "unknown",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN",
+      "raw_sms": "Hey, I paid you ₹774 for dinner, sent via phonepe!",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          77400
+        ],
+        "merchant": null,
+        "account_last4": null,
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "personal-contact-054"
+    },
+    {
+      "id": "phishing-debit-056-v1",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN_PHONE",
+      "raw_sms": "Rs.10,137.00 debited from A/c XX1371 on 12-08-26. If not you, click example.invalid to block.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1013700
+        ],
+        "merchant": null,
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "phishing-debit-056"
+    },
+    {
+      "id": "phishing-debit-056-v2",
+      "source_ids": [
+        "omoi_mit",
+        "upi_sms_parser_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Unknown",
+      "sender_header": "UNKNOWN_PHONE",
+      "raw_sms": "Rs.10,274.00 debited from A/c XX1508 on 12-08-26. If not you, click example.invalid to block.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          1027400
+        ],
+        "merchant": null,
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "phishing-debit-056"
+    },
+    {
+      "id": "amount-over-cap-057-v1",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.5,00,00,137 debited from A/c XX1371 towards SETTLEMENT on 12-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          5000013700
+        ],
+        "merchant": "SETTLEMENT",
+        "account_last4": "1371",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "amount-over-cap-057"
+    },
+    {
+      "id": "amount-over-cap-057-v2",
+      "source_ids": [
+        "omoi_mit",
+        "pennywise_agpl_pattern"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "non_financial",
+      "rail": "bank_account",
+      "bank_or_app": "Example Bank",
+      "sender_header": "EXBANK",
+      "raw_sms": "Rs.5,00,00,274 debited from A/c XX1508 towards SETTLEMENT on 12-08-26.",
+      "expected": {
+        "bookable": false,
+        "direction": "none",
+        "currency": "INR",
+        "transaction_amount_paise": null,
+        "mentioned_amounts_paise": [
+          5000027400
+        ],
+        "merchant": "SETTLEMENT",
+        "account_last4": "1508",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "amount-over-cap-057"
+    },
+    {
+      "id": "bank-account-avl-bal-058-v1",
+      "source_ids": [
+        "transaction_sms_parser_test_corpus_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "SAMPLE BANK",
+      "sender_header": "SAMPLEBK",
+      "raw_sms": "INR 2,537 debited from A/c no. XX3560 on 18-Aug-26 at SAMPLE STORE. Avl Bal- INR 2,480.23.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 253700,
+        "mentioned_amounts_paise": [
+          253700,
+          248023
+        ],
+        "merchant": "SAMPLE STORE",
+        "account_last4": "3560",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "bank-account-avl-bal-058"
+    },
+    {
+      "id": "bank-account-avl-bal-058-v2",
+      "source_ids": [
+        "transaction_sms_parser_test_corpus_mit",
+        "omoi_mit"
+      ],
+      "provenance": "synthetic_numeric_variant",
+      "kind": "debit",
+      "rail": "bank_account",
+      "bank_or_app": "SAMPLE BANK",
+      "sender_header": "SAMPLEBK",
+      "raw_sms": "INR 2,674 debited from A/c no. XX3697 on 18-Aug-26 at SAMPLE STORE. Avl Bal- INR 2,617.23.",
+      "expected": {
+        "bookable": true,
+        "direction": "debit",
+        "currency": "INR",
+        "transaction_amount_paise": 267400,
+        "mentioned_amounts_paise": [
+          267400,
+          261723
+        ],
+        "merchant": "SAMPLE STORE",
+        "account_last4": "3697",
+        "card_last4": null,
+        "reference": null
+      },
+      "variant_of": "bank-account-avl-bal-058"
+    }
+  ]
+}

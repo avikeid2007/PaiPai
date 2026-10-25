@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PaiPai.Mobile.Pages.HistoryPage" Title="History"
+             Shell.NavBarIsVisible="False" BackgroundColor="{StaticResource Canvas}">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="20,16,20,10" RowSpacing="12">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+            <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                <Label Text="Activity" Style="{StaticResource PageTitle}" />
+                <Label Text="Every transaction, all in one place" Style="{StaticResource BodyMuted}" />
+            </VerticalStackLayout>
+            <Button Grid.Column="1" Text="＋ Add" Command="{Binding AddCommand}" Style="{StaticResource AccentButton}"
+                    HeightRequest="46" Padding="14,8" VerticalOptions="Center" />
+        </Grid>
+
+        <Border Grid.Row="1" BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="12,2">
+            <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="9">
+                <Label Text="⌕" FontSize="25" TextColor="{StaticResource Muted}" VerticalTextAlignment="Center" />
+                <Entry Grid.Column="1" Text="{Binding SearchText}" Placeholder="Search transactions"
+                       ReturnType="Search" Style="{StaticResource FieldEntry}" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="6">
+            <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                <Picker ItemsSource="{Binding DirectionFilters}" SelectedItem="{Binding DirectionFilter}" Title="Type"
+                        Style="{StaticResource FieldPicker}" Margin="7,0" />
+                <Picker Grid.Column="1" ItemsSource="{Binding PeriodFilters}" SelectedItem="{Binding PeriodFilter}" Title="Period"
+                        Style="{StaticResource FieldPicker}" Margin="7,0" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <Label Text="{Binding Status}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Muted}" VerticalOptions="Center" />
+            <Button Grid.Column="1" Text="Apply filters" Command="{Binding LoadCommand}" Style="{StaticResource QuietButton}"
+                    HeightRequest="38" Padding="10,6" />
+        </Grid>
+
+        <CollectionView Grid.Row="4" ItemsSource="{Binding Entries}" SelectionMode="None" Margin="0,2,0,0">
+            <CollectionView.EmptyView>
+                <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="22" Margin="0,10">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nothing here yet" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        <Label Text="Try a different filter or add your first transaction." Style="{StaticResource BodyMuted}" />
+                    </VerticalStackLayout>
+                </Border>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" StrokeThickness="1" Padding="13" Margin="0,0,0,9">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenDetailsCommand}"
+                                                  CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="42,*,Auto" ColumnSpacing="10">
+                            <Border BackgroundColor="{StaticResource SoftGreen}" HeightRequest="40" WidthRequest="40" VerticalOptions="Center">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Label Text="↘" FontSize="19" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label Text="{Binding Merchant}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Category}" FontSize="12" TextColor="{StaticResource Muted}" LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding DisplayDateMethod}" FontSize="11" TextColor="{StaticResource Muted}" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="End" VerticalOptions="Center">
+                                <Label Text="{Binding Amount, StringFormat='₹{0:N2}'}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Ink}" HorizontalTextAlignment="End" />
+                                <Label Text="{Binding Direction}" FontSize="11" TextColor="{StaticResource Muted}" HorizontalTextAlignment="End" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

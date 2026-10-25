@@ -1,0 +1,32 @@
+# .NET build output
+**/bin/
+**/obj/
+**/TestResults/
+**/artifacts/
+
+# IDE state
+**/.vs/
+**/.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Android local configuration and packages
+**/local.properties
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Local databases and generated coverage
+*.db
+*.db3
+*.sqlite
+*.sqlite3
+coverage/
+coverage.*
+
+# OS metadata
+.DS_Store
+Thumbs.db

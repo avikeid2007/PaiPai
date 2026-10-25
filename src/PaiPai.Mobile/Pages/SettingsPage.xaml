@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PaiPai.Mobile.Pages.SettingsPage" Title="Settings"
+             Shell.NavBarIsVisible="False" BackgroundColor="{StaticResource Canvas}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16,20,28" Spacing="17">
+            <VerticalStackLayout Spacing="3">
+                <Label Text="More" Style="{StaticResource PageTitle}" />
+                <Label Text="Privacy, permissions and your data" Style="{StaticResource BodyMuted}" />
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="{StaticResource PrimaryDeep}" StrokeThickness="0" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <Grid ColumnDefinitions="42,*" ColumnSpacing="12">
+                    <Border BackgroundColor="#2B5A4C" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Label Text="◈" FontSize="20" TextColor="{StaticResource Lime}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Text="Private by design" FontSize="16" FontAttributes="Bold" TextColor="White" />
+                        <Label Text="Your finance data stays on this device. Pai Pai does not upload it." FontSize="12" TextColor="#D4E3DA" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="Permissions" Style="{StaticResource SectionTitle}" />
+                        <Label Text="Choose which Android features Pai Pai can use" Style="{StaticResource BodyMuted}" />
+                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Text="Read SMS inbox" FontSize="14" TextColor="{StaticResource Ink}" VerticalOptions="Center" />
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource Canvas}" Padding="9,5">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                            <Label Text="{Binding SmsReadPermissionLabel}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        </Border>
+                    </Grid>
+                    <Button Text="Import or resume SMS history" Command="{Binding OpenImportCommand}" Style="{StaticResource SecondaryButton}" />
+                    <BoxView HeightRequest="1" Color="{StaticResource Line}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Text="Live SMS detection" FontSize="14" TextColor="{StaticResource Ink}" VerticalOptions="Center" />
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource Canvas}" Padding="9,5">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                            <Label Text="{Binding LiveSmsPermissionLabel}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        </Border>
+                    </Grid>
+                    <Button Text="Enable live SMS detection" Command="{Binding EnableLiveSmsCommand}" Style="{StaticResource SecondaryButton}" />
+                    <BoxView HeightRequest="1" Color="{StaticResource Line}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label Text="Bill notifications" FontSize="14" TextColor="{StaticResource Ink}" VerticalOptions="Center" />
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource Canvas}" Padding="9,5">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                            <Label Text="{Binding NotificationPermissionLabel}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                        </Border>
+                    </Grid>
+                    <Button Text="Enable bill notifications" Command="{Binding EnableNotificationsCommand}" Style="{StaticResource SecondaryButton}" />
+                    <Label Text="Backups include locally stored financial SMS text. Keep exported files private." FontSize="12" TextColor="{StaticResource Muted}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="11">
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="Your data" Style="{StaticResource SectionTitle}" />
+                        <Label Text="Take a copy with you or restore a previous one" Style="{StaticResource BodyMuted}" />
+                    </VerticalStackLayout>
+                    <Button Text="Export transactions as CSV" Command="{Binding ExportCsvCommand}" Style="{StaticResource SecondaryButton}" />
+                    <Button Text="Create full backup" Command="{Binding BackupCommand}" Style="{StaticResource SecondaryButton}" />
+                    <Button Text="Restore from backup" Command="{Binding RestoreBackupCommand}" Style="{StaticResource SecondaryButton}" />
+                    <BoxView HeightRequest="1" Color="{StaticResource Line}" Margin="0,3" />
+                    <Button Text="Clear all app data" Command="{Binding ClearAllDataCommand}" Style="{StaticResource DangerButton}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding Status}" FontSize="13" TextColor="{StaticResource Primary}" Margin="2,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

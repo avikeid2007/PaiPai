@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PaiPai.Mobile.Pages.SummaryPage" Title="Summary"
+             Shell.NavBarIsVisible="False" BackgroundColor="{StaticResource Canvas}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16,20,28" Spacing="18">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Spacing="3">
+                    <Label Text="Insights" Style="{StaticResource PageTitle}" />
+                    <Label Text="Your month at a glance" Style="{StaticResource BodyMuted}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="＋" Command="{Binding AddCommand}" Style="{StaticResource AccentButton}"
+                        WidthRequest="48" HeightRequest="48" Padding="0" VerticalOptions="Center" />
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="6">
+                <Border.StrokeShape><RoundRectangle CornerRadius="17" /></Border.StrokeShape>
+                <Grid ColumnDefinitions="48,*,48" ColumnSpacing="8">
+                    <Button Text="‹" Command="{Binding PreviousCommand}" Style="{StaticResource SecondaryButton}"
+                            WidthRequest="44" HeightRequest="44" Padding="0" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                        <Label Text="VIEWING PERIOD" Style="{StaticResource Eyebrow}" HorizontalTextAlignment="Center" />
+                        <Label Text="{Binding MonthLabel}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Ink}" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="2" Text="›" Command="{Binding NextCommand}" Style="{StaticResource SecondaryButton}"
+                            WidthRequest="44" HeightRequest="44" Padding="0" />
+                </Grid>
+            </Border>
+
+            <Border Padding="20" StrokeThickness="0">
+                <Border.StrokeShape><RoundRectangle CornerRadius="24" /></Border.StrokeShape>
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#123D34" Offset="0" />
+                        <GradientStop Color="#08705B" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="TOTAL SPENT" FontSize="11" FontAttributes="Bold" CharacterSpacing="1.5" TextColor="#BFD6C9" />
+                    <Label Text="{Binding Spent}" FontSize="34" FontAttributes="Bold" TextColor="White" Margin="0,3,0,4" />
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,6,0,0">
+                        <Label Text="Confirmed transaction totals" FontSize="12" TextColor="#D4E3DA" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="{Binding MonthLabel}" FontSize="12" TextColor="#D4E3DA" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="19" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="INCOME" Style="{StaticResource Eyebrow}" />
+                        <Label Text="{Binding Income}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}" LineBreakMode="TailTruncation" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="15">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="19" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="NET FLOW" Style="{StaticResource Eyebrow}" />
+                        <Label Text="{Binding Net}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="13">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="Spending mix" Style="{StaticResource SectionTitle}" />
+                            <Label Text="Where your money went" Style="{StaticResource BodyMuted}" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="CATEGORY" Style="{StaticResource Eyebrow}" VerticalOptions="Center" />
+                    </Grid>
+                    <Label Text="No category activity this month yet." IsVisible="{Binding HasNoCategories}" Style="{StaticResource BodyMuted}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Categories}" Spacing="11">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid RowDefinitions="Auto,7" ColumnDefinitions="*,Auto" RowSpacing="7">
+                                    <Label Text="{Binding Label}" FontSize="13" TextColor="{StaticResource Ink}" />
+                                    <Label Grid.Column="1" Text="{Binding Amount, StringFormat='₹{0:N2}'}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Progress="{Binding Share}" ProgressColor="{StaticResource Primary}" BackgroundColor="{StaticResource Line}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource Surface}" Stroke="{StaticResource Line}" Padding="17">
+                <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="13">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="By account &amp; card" Style="{StaticResource SectionTitle}" />
+                            <Label Text="Spending across your payment methods" Style="{StaticResource BodyMuted}" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="ACCOUNTS" Style="{StaticResource Eyebrow}" VerticalOptions="Center" />
+                    </Grid>
+                    <Label Text="Add account digits to transactions to see this breakdown." IsVisible="{Binding HasNoAccounts}" Style="{StaticResource BodyMuted}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Accounts}" Spacing="11">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid RowDefinitions="Auto,7" ColumnDefinitions="*,Auto" RowSpacing="7">
+                                    <Label Text="{Binding Label}" FontSize="13" TextColor="{StaticResource Ink}" />
+                                    <Label Grid.Column="1" Text="{Binding Amount, StringFormat='₹{0:N2}'}" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource Ink}" />
+                                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Progress="{Binding Share}" ProgressColor="#B2D563" BackgroundColor="{StaticResource Line}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
