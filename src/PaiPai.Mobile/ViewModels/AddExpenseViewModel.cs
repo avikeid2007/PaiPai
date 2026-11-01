@@ -24,6 +24,8 @@ public partial class AddExpenseViewModel : ObservableObject
     [ObservableProperty] private string _payee = "";
     [ObservableProperty] private string _category = "Food";
     [ObservableProperty] private string _accountHint = "";
+    [ObservableProperty] private string _accountName = "";
+    [ObservableProperty] private string _payeeNickname = "";
     [ObservableProperty] private string _note = "";
     [ObservableProperty] private DateTime _date = DateTime.Today;
     [ObservableProperty] private string _errorMessage = "";
@@ -39,6 +41,8 @@ public partial class AddExpenseViewModel : ObservableObject
         Payee = "";
         Category = "Food";
         AccountHint = "";
+        AccountName = "";
+        PayeeNickname = "";
         Note = "";
         Date = DateTime.Today;
         ErrorMessage = "";
@@ -57,6 +61,8 @@ public partial class AddExpenseViewModel : ObservableObject
         Payee = entry.Merchant;
         Category = entry.Category;
         AccountHint = entry.AccountHint;
+        AccountName = entry.AccountName;
+        PayeeNickname = entry.PayeeNickname;
         Note = entry.Note;
         Date = entry.Date;
     }
@@ -81,12 +87,15 @@ public partial class AddExpenseViewModel : ObservableObject
         entry.Category = Category;
         entry.Method = Method;
         entry.AccountHint = AccountHint.Trim();
+        entry.AccountName = AccountName.Trim();
+        entry.PayeeNickname = PayeeNickname.Trim();
         entry.Note = Note.Trim();
         entry.Confirmed = true;
         if (existing is null)
             await _repo.AddAsync(entry);
         else
             await _repo.UpdateEntryAsync(entry);
+        await _repo.ApplyPayeeNicknameAsync(entry.Merchant, entry.PayeeNickname);
         await Shell.Current.GoToAsync("..");
     }
 

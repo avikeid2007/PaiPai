@@ -40,6 +40,10 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                         <Entry Text="{Binding Payee}" Placeholder="Merchant or person" Style="{StaticResource FieldEntry}" />
                     </Border>
+                    <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="10,0">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Entry Text="{Binding PayeeNickname}" Placeholder="Payee nickname (optional)" Style="{StaticResource FieldEntry}" />
+                    </Border>
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout Spacing="6">
                             <Label Text="METHOD" Style="{StaticResource Eyebrow}" />
@@ -63,7 +67,7 @@
                 <Border.StrokeShape><RoundRectangle CornerRadius="21" /></Border.StrokeShape>
                 <VerticalStackLayout Spacing="12">
                     <Label Text="MORE DETAILS" Style="{StaticResource Eyebrow}" />
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="8">
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Account / card digits" FontSize="12" TextColor="{StaticResource Muted}" />
                             <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="8,0">
@@ -72,6 +76,13 @@
                             </Border>
                         </VerticalStackLayout>
                         <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Bank / account name" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="8,0">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="13" /></Border.StrokeShape>
+                                <Entry Text="{Binding AccountName}" Placeholder="e.g. HDFC salary account" Style="{StaticResource FieldEntry}" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="5">
                             <Label Text="Date" FontSize="12" TextColor="{StaticResource Muted}" />
                             <Border BackgroundColor="{StaticResource Canvas}" StrokeThickness="0" Padding="7,0">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="13" /></Border.StrokeShape>

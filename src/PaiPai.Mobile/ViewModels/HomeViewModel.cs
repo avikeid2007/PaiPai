@@ -32,12 +32,8 @@ public partial class HomeViewModel : ObservableObject
         {
             if (await _importer.HasPermissionAsync())
             {
-                var state = await _repo.GetImportStateAsync();
-                if (state.IsComplete)
-                {
-                    var sync = await _importer.SyncNewAsync(null, CancellationToken.None);
-                    SyncStatus = sync.ProcessedThisRun > 0 ? $"Synced {sync.ProcessedThisRun:N0} new messages." : "";
-                }
+                var sync = await _importer.SyncNewAsync(null, CancellationToken.None);
+                SyncStatus = sync.ProcessedThisRun > 0 ? $"Checked {sync.ProcessedThisRun:N0} recent or new messages." : "";
             }
         }
         catch (UnauthorizedAccessException)

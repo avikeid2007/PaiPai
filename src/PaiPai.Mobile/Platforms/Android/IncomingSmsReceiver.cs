@@ -14,21 +14,30 @@ public sealed class IncomingSmsReceiver : BroadcastReceiver
     public override void OnReceive(Context? context, Intent? intent)
     {
         if (context is null || intent?.Action != "android.provider.Telephony.SMS_RECEIVED") return;
+        // Unpack the broadcast before leaving the receiver callback. Keep only plain message data
+        // in the async work so Android does not have to retain the Intent while the task runs.
+        var messages = Telephony.Sms.Intents.GetMessagesFromIntent(intent);
+        if (messages is null || messages.Length == 0) return;
+        var grouped = messages.GroupBy(message => (message.OriginatingAddress ?? "", message.TimestampMillis))
+            .Select(group => new
+            {
+                Sender = group.Key.Item1,
+                Body = string.Concat(group.Select(message => message.MessageBody ?? "")),
+                Timestamp = group.Key.Item2
+            })
+            .ToArray();
+        global::Android.Util.Log.Info("PaiPaiSms", $"SMS broadcast received with {grouped.Length} message(s).");
         var pending = GoAsync();
         _ = Task.Run(async () =>
         {
             try
             {
-                var messages = Telephony.Sms.Intents.GetMessagesFromIntent(intent);
-                if (messages is null || messages.Length == 0) return;
                 var processor = MauiProgram.Services.GetRequiredService<SmsMessageProcessor>();
-                foreach (var group in messages.GroupBy(message => (message.OriginatingAddress ?? "", message.TimestampMillis)))
+                foreach (var message in grouped)
                 {
-                    var sender = group.Key.Item1;
-                    var body = string.Concat(group.Select(message => message.MessageBody ?? ""));
-                    var timestamp = group.Key.Item2;
-                    var receivedAt = DateTimeOffset.FromUnixTimeMilliseconds(timestamp).LocalDateTime;
-                    await processor.ProcessAsync(CreateStableId(sender, timestamp, body), sender, body, receivedAt);
+                    var receivedAt = DateTimeOffset.FromUnixTimeMilliseconds(message.Timestamp).LocalDateTime;
+                    var status = await processor.ProcessAsync(CreateStableId(message.Sender, message.Timestamp, message.Body), message.Sender, message.Body, receivedAt);
+                    global::Android.Util.Log.Info("PaiPaiSms", $"Incoming SMS processed with status {status}.");
                 }
             }
             catch (Exception ex)

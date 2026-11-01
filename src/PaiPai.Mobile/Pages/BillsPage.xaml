@@ -45,6 +45,7 @@
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
                                     <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
                                     <Label Text="{Binding Cadence}" FontSize="12" TextColor="{StaticResource Muted}" />
+                                    <Label Text="{Binding Category}" FontSize="11" TextColor="{StaticResource Primary}" />
                                 </VerticalStackLayout>
                                 <Border Grid.Column="2" BackgroundColor="{StaticResource SoftAmber}" Padding="9,5" VerticalOptions="Start">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
@@ -59,6 +60,8 @@
                                 <Label Grid.Column="1" Text="{Binding DisplayAmount}" FontSize="19" FontAttributes="Bold" TextColor="{StaticResource Ink}" VerticalOptions="Center" />
                             </Grid>
                             <Label Text="{Binding DisplayAccountHint}" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Label Text="{Binding DisplayBillingPeriod}" FontSize="12" TextColor="{StaticResource Muted}" />
+                            <Label Text="{Binding DisplayDisconnectionDate}" FontSize="12" TextColor="{StaticResource Danger}" />
                             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="7">
                                 <Button Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
                                         CommandParameter="{Binding .}" Style="{StaticResource SecondaryButton}" HeightRequest="42" FontSize="12" Padding="7,6" />

@@ -95,8 +95,9 @@
                                     <Label Text="↘" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
                                 </Border>
                                 <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
-                                    <Label Text="{Binding Merchant}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding DisplayMerchant}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource Ink}" LineBreakMode="TailTruncation" />
                                     <Label Text="{Binding DisplayCategory}" FontSize="12" TextColor="{StaticResource Muted}" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding DisplayPaymentSource}" FontSize="11" TextColor="{StaticResource Primary}" LineBreakMode="TailTruncation" />
                                 </VerticalStackLayout>
                                 <VerticalStackLayout Grid.Column="2" Spacing="3" HorizontalOptions="End" VerticalOptions="Center">
                                     <Label Text="{Binding Amount, StringFormat='₹{0:N2}'}" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource Ink}" HorizontalTextAlignment="End" />

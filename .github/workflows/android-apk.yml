@@ -1,0 +1,60 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Set up Java for Android
+        uses: actions/setup-java@v6
+        with:
+          distribution: microsoft
+          java-version: '17'
+
+      - name: Install MAUI Android workload
+        run: dotnet workload restore src/PaiPai.Mobile/PaiPai.Mobile.csproj
+
+      - name: Run core tests
+        run: dotnet test tests/PaiPai.Core.Tests/PaiPai.Core.Tests.csproj --configuration Release
+
+      - name: Publish Release APK
+        run: dotnet publish src/PaiPai.Mobile/PaiPai.Mobile.csproj --configuration Release --framework net10.0-android -p:AndroidPackageFormat=apk
+
+      - name: Stage APK artifact
+        shell: pwsh
+        run: |
+          $apk = Get-ChildItem "src/PaiPai.Mobile/bin/Release/net10.0-android" -Filter "*-Signed.apk" -Recurse |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+
+          if (-not $apk) {
+            throw "No signed APK was produced by dotnet publish."
+          }
+
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          Copy-Item -LiteralPath $apk.FullName -Destination "artifacts/PaiPai-Android-Release.apk" -Force
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: PaiPai-Android-Release
+          path: artifacts/PaiPai-Android-Release.apk
+          if-no-files-found: error
+          retention-days: 14
