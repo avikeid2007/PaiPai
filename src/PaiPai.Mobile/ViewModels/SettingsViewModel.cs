@@ -50,9 +50,16 @@ public partial class SettingsViewModel : ObservableObject
     async Task EnableLiveSmsAsync()
     {
         HasLiveSmsPermission = await Permissions.RequestAsync<SmsReceivePermission>() == PermissionStatus.Granted;
-        Status = HasLiveSmsPermission
-            ? "Live SMS detection is enabled. Clear matches are added automatically; uncertain activity stays in Review."
-            : "SMS receive permission was not granted. You can change it in Android app settings.";
+        if (!HasLiveSmsPermission)
+        {
+            Status = "SMS receive permission was not granted. You can change it in Android app settings.";
+            return;
+        }
+
+        HasSmsReadPermission = await _importer.HasPermissionAsync() || await _importer.RequestPermissionAsync();
+        Status = HasSmsReadPermission
+            ? "Live SMS is enabled. Recent messages are also checked when Pai Pai opens, in case Android missed a background broadcast."
+            : "Live SMS is enabled. Inbox access was not granted, so messages Android misses while Pai Pai is stopped cannot be caught up automatically.";
     }
 
     [RelayCommand]
@@ -74,13 +81,13 @@ public partial class SettingsViewModel : ObservableObject
         var path = Path.Combine(FileSystem.CacheDirectory, $"paipai-transactions-{DateTime.Now:yyyyMMdd-HHmm}.csv");
         await using (var writer = new StreamWriter(path, false, new UTF8Encoding(true)))
         {
-            await writer.WriteLineAsync("Date,Direction,Amount,Merchant,Category,Method,Account,Source,Reference,Note,Confirmed");
+            await writer.WriteLineAsync("Date,Direction,Amount,Merchant,Payee nickname,Category,Method,Account name,Account,Source,Reference,Note,Confirmed");
             foreach (var e in entries)
                 await writer.WriteLineAsync(string.Join(",", new[]
                 {
                     Csv(e.Date.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture)),
                     Csv(e.Direction.ToString()), Csv(e.Amount.ToString("0.00", CultureInfo.InvariantCulture)),
-                    Csv(e.Merchant), Csv(e.Category), Csv(e.Method), Csv(e.AccountHint), Csv(e.Source.ToString()),
+                    Csv(e.Merchant), Csv(e.PayeeNickname), Csv(e.Category), Csv(e.Method), Csv(e.AccountName), Csv(e.AccountHint), Csv(e.Source.ToString()),
                     Csv(e.Reference), Csv(e.Note), Csv(e.Confirmed.ToString())
                 }));
         }

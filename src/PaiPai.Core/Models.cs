@@ -14,9 +14,11 @@ public class LedgerEntry
     public Direction Direction { get; set; }
     public DateTime Date { get; set; }
     public string Merchant { get; set; } = "";
+    public string PayeeNickname { get; set; } = "";
     public string Category { get; set; } = "Other";
     public string Method { get; set; } = "";       // UPI, Card, Cash, Transfer, Cheque, ATM, Other
     public string AccountHint { get; set; } = "";  // last digits only
+    public string AccountName { get; set; } = "";
     public decimal? BalanceAfter { get; set; }
     public string Reference { get; set; } = "";
     public EntrySource Source { get; set; }
@@ -25,6 +27,11 @@ public class LedgerEntry
     public bool Confirmed { get; set; }
     [Ignore] public string DisplayCategory => Confirmed ? Category : $"{Category} - pending";
     [Ignore] public string DisplayDateMethod => $"{Date:dd MMM yyyy} - {Method}";
+    [Ignore] public string DisplayMerchant => string.IsNullOrWhiteSpace(PayeeNickname) ? Merchant : PayeeNickname;
+    [Ignore] public string DisplayPaymentSource => !string.IsNullOrWhiteSpace(AccountName)
+        ? (string.IsNullOrWhiteSpace(AccountHint) ? AccountName : $"{AccountName} ··{AccountHint}")
+        : !string.IsNullOrWhiteSpace(AccountHint) ? $"{Method} ··{AccountHint}"
+        : string.IsNullOrWhiteSpace(Method) ? "Payment source not set" : Method;
 }
 
 /// <summary>Locally stored inbox message and parser result, keyed by the Android SMS row id.</summary>
@@ -41,6 +48,7 @@ public class RawSmsMessage
     public string Merchant { get; set; } = "";
     public string Method { get; set; } = "";
     public string AccountHint { get; set; } = "";
+    public string AccountName { get; set; } = "";
     public decimal? BalanceAfter { get; set; }
     public string Reference { get; set; } = "";
     public int? LedgerEntryId { get; set; }
@@ -64,6 +72,9 @@ public class BillReminder
     public decimal? Amount { get; set; }
     public DateTime DueDate { get; set; }
     public string AccountHint { get; set; } = "";
+    public string BillingPeriod { get; set; } = "";
+    public DateTime? DisconnectionDate { get; set; }
+    public string Category { get; set; } = "Other";
     public string Cadence { get; set; } = "One time";
     public BillStatus Status { get; set; } = BillStatus.Upcoming;
     public bool ReminderEnabled { get; set; } = true;
@@ -74,6 +85,8 @@ public class BillReminder
     [Ignore] public string DisplayAmount => Amount.HasValue ? $"₹{Amount.Value:N2}" : "Amount not set";
     [Ignore] public string DisplayStatus => Status == BillStatus.Upcoming && DueDate.Date < DateTime.Today ? "Overdue" : Status.ToString();
     [Ignore] public string DisplayAccountHint => string.IsNullOrWhiteSpace(AccountHint) ? "" : $"Account/card - {AccountHint}";
+    [Ignore] public string DisplayBillingPeriod => string.IsNullOrWhiteSpace(BillingPeriod) ? "" : $"Billing period - {BillingPeriod}";
+    [Ignore] public string DisplayDisconnectionDate => DisconnectionDate.HasValue ? $"Disconnection date - {DisconnectionDate.Value:dd MMM yyyy}" : "";
     [Ignore] public bool CanMarkPaid => Status == BillStatus.Upcoming;
     [Ignore] public bool CanDismiss => Status == BillStatus.Upcoming;
 }
@@ -84,4 +97,6 @@ public class AppSetting
     public string Value { get; set; } = "";
 }
 
-public sealed record ParsedBillReminder(string Name, decimal? Amount, DateTime DueDate, string Cadence);
+public sealed record ParsedBillReminder(string Name, decimal? Amount, DateTime DueDate, string Cadence,
+    string AccountHint = "", string BillingPeriod = "", DateTime? DisconnectionDate = null,
+    bool IsPaymentConfirmation = false, string Category = "Other");

@@ -35,7 +35,9 @@ public partial class TransactionDetailsViewModel : ObservableObject
         AmountText = $"₹{Entry.Amount:N2}";
         DirectionText = Entry.Direction == Direction.Debit ? "Expense" : "Income";
         DateText = Entry.Date.ToString("dddd, dd MMMM yyyy · h:mm tt");
-        AccountText = string.IsNullOrWhiteSpace(Entry.AccountHint) ? "Account or card digits: Not detected" : $"Account or card ending in {Entry.AccountHint}";
+        AccountText = !string.IsNullOrWhiteSpace(Entry.AccountName)
+            ? (string.IsNullOrWhiteSpace(Entry.AccountHint) ? Entry.AccountName : $"{Entry.AccountName}, ending in {Entry.AccountHint}")
+            : string.IsNullOrWhiteSpace(Entry.AccountHint) ? "Payment source: " + Entry.DisplayPaymentSource : $"Account or card ending in {Entry.AccountHint}";
         BalanceText = Entry.BalanceAfter is decimal balance ? $"Balance after transaction: ₹{balance:N2}" : "Balance after transaction: Not provided";
         ReferenceText = string.IsNullOrWhiteSpace(Entry.Reference) ? "Reference number: Not provided" : $"Reference number: {Entry.Reference}";
         NoteText = string.IsNullOrWhiteSpace(Entry.Note) ? "No note" : Entry.Note;

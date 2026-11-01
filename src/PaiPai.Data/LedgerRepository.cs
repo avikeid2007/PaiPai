@@ -37,12 +37,23 @@ public sealed class LedgerRepository
                 await _db.CreateTableAsync<SmsImportState>();
                 await _db.CreateTableAsync<BillReminder>();
                 await _db.CreateTableAsync<AppSetting>();
+                await EnsureColumnAsync("LedgerEntry", "PayeeNickname", "TEXT NOT NULL DEFAULT ''");
+                await EnsureColumnAsync("LedgerEntry", "AccountName", "TEXT NOT NULL DEFAULT ''");
+                await EnsureColumnAsync("BillReminder", "BillingPeriod", "TEXT NOT NULL DEFAULT ''");
+                await EnsureColumnAsync("BillReminder", "DisconnectionDate", "TEXT NULL");
+                await EnsureColumnAsync("BillReminder", "Category", "TEXT NOT NULL DEFAULT 'Other'");
                 await ConfirmPreviouslyParsedTransactionsAsync();
                 _ready = true;
             }
         }
         finally { _initializeLock.Release(); }
         return _db;
+    }
+
+    async Task EnsureColumnAsync(string table, string column, string definition)
+    {
+        try { await _db.ExecuteAsync($"ALTER TABLE {table} ADD COLUMN {column} {definition}"); }
+        catch (SQLiteException ex) when (ex.Message.Contains("duplicate column", StringComparison.OrdinalIgnoreCase)) { }
     }
 
     async Task ConfirmPreviouslyParsedTransactionsAsync()
@@ -193,6 +204,30 @@ public sealed class LedgerRepository
         var db = await Db();
         if (await db.FindAsync<RawSmsMessage>(raw.SmsId) is not null || await HasMatchingRawMessageAsync(raw))
             return SmsImportStatus.Duplicate;
+        if (!string.IsNullOrWhiteSpace(bill.BillingPeriod))
+        {
+            var existing = await db.Table<BillReminder>()
+                .Where(x => x.Name == bill.Name && x.AccountHint == bill.AccountHint && x.BillingPeriod == bill.BillingPeriod)
+                .FirstOrDefaultAsync();
+            if (existing is not null)
+            {
+                bill.Id = existing.Id;
+                existing.Amount = bill.Amount;
+                existing.DueDate = bill.DueDate;
+                existing.DisconnectionDate = bill.DisconnectionDate;
+                existing.Category = bill.Category;
+                existing.Note = bill.Note;
+                existing.SourceSmsId = raw.SmsId;
+                existing.Status = BillStatus.Upcoming;
+                await db.UpdateAsync(existing);
+                raw.Status = SmsImportStatus.BillSaved;
+                raw.Amount = bill.Amount;
+                raw.Merchant = bill.Name;
+                raw.Reason = "Existing bill reminder updated from a repeated SMS";
+                await db.InsertAsync(raw);
+                return SmsImportStatus.BillSaved;
+            }
+        }
         bill.SourceSmsId = raw.SmsId;
         if (!await SaveBillReminderAsync(bill)) return SmsImportStatus.Duplicate;
         raw.Status = SmsImportStatus.BillSaved;
@@ -201,6 +236,31 @@ public sealed class LedgerRepository
         raw.Reason = "Bill reminder saved";
         await db.InsertAsync(raw);
         return raw.Status;
+    }
+
+    public async Task<BillReminder?> TryMarkMatchingBillPaidAsync(string provider, decimal amount, string accountHint)
+    {
+        var db = await Db();
+        var candidates = await db.Table<BillReminder>()
+            .Where(x => x.Status == BillStatus.Upcoming && x.Amount == amount && x.Name.Contains(provider))
+            .ToListAsync();
+        if (!string.IsNullOrWhiteSpace(accountHint))
+            candidates = candidates.Where(x => x.AccountHint == accountHint).ToList();
+        if (candidates.Count != 1) return null;
+        candidates[0].Status = BillStatus.Paid;
+        await db.UpdateAsync(candidates[0]);
+        return candidates[0];
+    }
+
+    public async Task ApplyPayeeNicknameAsync(string merchant, string nickname)
+    {
+        var db = await Db();
+        var matching = await db.Table<LedgerEntry>().Where(x => x.Merchant == merchant).ToListAsync();
+        foreach (var entry in matching)
+        {
+            entry.PayeeNickname = nickname;
+            await db.UpdateAsync(entry);
+        }
     }
 
     async Task<bool> HasMatchingRawMessageAsync(RawSmsMessage raw)
@@ -265,8 +325,10 @@ public sealed class LedgerRepository
                 Category = Categorizer.Categorize(raw.Merchant),
                 Method = raw.Method,
                 AccountHint = raw.AccountHint,
+                AccountName = raw.AccountName,
                 BalanceAfter = raw.BalanceAfter,
                 Reference = raw.Reference,
+                Note = raw.Body,
                 Source = EntrySource.Sms,
                 SmsId = raw.SmsId,
                 Confirmed = true

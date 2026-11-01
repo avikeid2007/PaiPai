@@ -51,6 +51,10 @@ adb install -r src/PaiPai.Mobile/bin/Release/net10.0-android/com.paipai.app-Sign
 
 The Release APK is produced at `src/PaiPai.Mobile/bin/Release/net10.0-android/com.paipai.app-Signed.apk`. The `-r` option updates the installed app while preserving its app data.
 
+## Build APK with GitHub Actions
+
+The `Build Android APK` workflow runs on pushes to `main`, pull requests, and manual dispatch. It runs the core tests, builds the Android Release APK, and uploads it as the `PaiPai-Android-Release` artifact for 14 days. To download it, open the successful workflow run under the repository's **Actions** tab and select the artifact.
+
 Run the parser test suite with:
 
 ```powershell
