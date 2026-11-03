@@ -3,10 +3,11 @@ namespace PaiPai.Core;
 public static class Categorizer
 {
     public static readonly string[] Categories =
-        { "Food", "Transport", "Shopping", "Bills", "Rent", "Health", "Entertainment", "Other" };
+        { "Food", "Grocery", "Transport", "Shopping", "Bills", "Rent", "Health", "Entertainment", "Other" };
 
     static readonly (string Category, string[] Keys)[] Builtin =
     {
+        ("Grocery", new[] { "bigbasket", "blinkit", "zepto", "instamart", "dmart", "supermarket", "grocery", "jiomart" }),
         ("Food", new[] { "swiggy", "zomato", "restaurant", "cafe", "chai", "bakery", "dominos", "mcdonald" }),
         ("Transport", new[] { "uber", "ola", "rapido", "irctc", "metro", "petrol", "fuel", "fastag" }),
         ("Shopping", new[] { "amazon", "flipkart", "myntra", "ajio", "meesho" }),
