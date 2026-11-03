@@ -16,7 +16,9 @@
     <AndroidManifest>$(MSBuildProjectDirectory)\Platforms\Android\AndroidManifest.Release.xml</AndroidManifest>
   </PropertyGroup>
   <ItemGroup>
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg"
+              ForegroundFile="Resources\AppIcon\appiconfg.svg"
+              Color="#123D34" />
     <MauiImage Include="Resources\Images\*" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />

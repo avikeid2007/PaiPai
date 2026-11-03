@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Keep the mark inside Android's adaptive-icon safe zone. -->
+  <path d="M154 374V138h108c67 0 108 39 108 98s-41 98-108 98h-40v40H154zm68-100h40c27 0 41-13 41-38s-14-38-41-38h-40v76z" fill="#FFFFFF"/>
+  <circle cx="354" cy="360" r="43" fill="#D7F36B"/>
+</svg>
